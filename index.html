@@ -197,7 +197,7 @@ async function saveAs(k,nm){if(!pages.length||!k)return;const name=(nm||docName)
   if(k=='pdf')data=await pdfData();
   else if(k=='png')data=await new Promise(r=>document.querySelector('.lay').cv.toBlob(r));
   else{const t=[];for(let n=0;n<pages.length;n++)t.push(await pageText(n));
-   data=k=='html'?new Blob(['<html dir="auto"><meta charset="utf-8"><body>'+t.map(x=>'<p style="page-break-after:always;white-space:pre-wrap">'+x.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</p>').join('')+'<script>if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js')</script></body></html>'],{type:'text/html'}):new Blob([t.join('\n\n---\n\n')],{type:'text/plain'})}
+   data=k=='html'?new Blob(['<html dir="auto"><meta charset="utf-8"><body>'+t.map(x=>'<p style="page-break-after:always;white-space:pre-wrap">'+x.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</p>').join('')+'</body></html>'],{type:'text/html'}):new Blob([t.join('\n\n---\n\n')],{type:'text/plain'})}
   cb.remove();pl.remove();sv('تم بناء الملف',Math.round(data.size/1024)+' KB');LOG('built '+data.size);
   let dl=null;try{dl=await window.claude?.use('downloads')}catch(e){LOG('use(downloads) error '+e?.message)}
   if(!dl){sv('ميزة التنزيل غير متاحة هنا');direct();alt();return done()}
@@ -403,4 +403,5 @@ function sas(){if(!pages.length)return;$('#sn').value=docName;$('#sa').showModal
 function sasOk(){const f=$('#sf').value,n=$('#sn').value.trim()||docName;$('#sa').close();if(f=='pdf')docName=n;saveAs(f,n)}
 try{UI=localStorage.getItem('ui')||''}catch{}if(!LN[UI]){const l=navigator.language.slice(0,2);UI=LN[l]?l:'ar'}applyLang();ttl();
 setTool('select');
-</script></body></html>
+</script><script>if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js')</script>
+</body></html>
