@@ -1,0 +1,604 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#3b5bdb"><link rel="icon" href="icon-192.png"><title>محرر PDF الشامل</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#eef0f4;--pn:#fff;--tx:#1d2330;--ac:#3b5bdb;--bd:#d5d9e2}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#13151a;--pn:#1d2129;--tx:#e6e8ee;--ac:#8099f7;--bd:#343a46}}
+:root[data-theme=dark]{--bg:#13151a;--pn:#1d2129;--tx:#e6e8ee;--ac:#8099f7;--bd:#343a46}
+html,body{height:100%;margin:0}body{background:var(--bg);color:var(--tx);font:14px system-ui,"Segoe UI",Tahoma,sans-serif;display:flex;flex-direction:column}
+header{background:var(--pn);border-bottom:1px solid var(--bd);padding:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+button,select,input[type=color]{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:5px 9px;cursor:pointer}
+button:hover{border-color:var(--ac)}button.on,button.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
+input[type=color]{padding:0;width:30px;height:28px}input[type=number]{width:52px;font:inherit;padding:4px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:7px}
+.sep{width:1px;height:22px;background:var(--bd)}
+main{flex:1;display:flex;min-height:0}
+#th{width:120px;overflow:auto;background:var(--pn);border-inline-end:1px solid var(--bd);padding:6px;text-align:center}
+#th div{margin-bottom:8px;cursor:pointer;border:2px solid transparent;border-radius:6px;padding:2px;font-size:11px}#th div.on{border-color:var(--ac)}#th canvas{max-width:100%;background:#fff;display:block;margin:auto}
+#view{flex:1;overflow:auto;padding:14px;text-align:center}
+.sheet{position:relative;display:inline-block;background:#fff;box-shadow:0 2px 12px #0003;direction:ltr}
+.lay{position:absolute;inset:0}.tool-text .lay,.tool-cover .lay,.tool-edit .lay{cursor:crosshair}
+.o{position:absolute;box-sizing:border-box;direction:ltr}.o.sel{outline:2px dashed var(--ac)}
+.o.text{line-height:1.3;white-space:pre-wrap;color:#000;unicode-bidi:plaintext;text-align:start;overflow-wrap:anywhere;cursor:move}.o img{width:100%;height:100%;display:block;pointer-events:none}
+.rz{position:absolute;right:-6px;bottom:-6px;width:12px;height:12px;background:var(--ac);border-radius:3px;cursor:nwse-resize;display:none}.o.sel .rz{display:block}
+#ai{width:320px;background:var(--pn);border-inline-start:1px solid var(--bd);display:flex;flex-direction:column;min-height:0}
+#log{flex:1;overflow:auto;padding:8px}.m{margin:0 0 8px;padding:8px;border-radius:8px;background:var(--bg);white-space:pre-wrap;line-height:1.5}.m.u{background:var(--ac);color:#fff}
+.m button{margin:6px 4px 0 0;font-size:12px}
+#q{display:flex;gap:6px;padding:8px;border-top:1px solid var(--bd)}#q textarea{flex:1;font:inherit;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:7px;padding:6px;resize:none;height:44px}
+#qa{padding:6px 8px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid var(--bd)}#qa button{font-size:12px;padding:3px 7px}
+#drop{margin:auto;padding:40px;border:2px dashed var(--bd);border-radius:14px;opacity:.8}
+dialog{background:var(--pn);color:var(--tx);border:1px solid var(--bd);border-radius:12px}#sg{background:#fff;border:1px solid var(--bd);border-radius:8px;touch-action:none;display:block}
+#ts{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ac);color:#fff;padding:8px 14px;border-radius:8px;display:none;z-index:9}#th label{cursor:pointer}#pi{font-size:12px;opacity:.8}
+@media(max-width:800px){main{flex-direction:column}#th{width:auto;height:112px;display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;flex:none}#th div{flex:none;margin:0}#ai{position:fixed;inset:0;top:auto;height:70%;width:auto;display:none;border:1px solid var(--bd)}#ai.show{display:flex}}
+#sc{display:none;position:fixed;inset:0;z-index:20;background:var(--bg);flex-direction:column;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}#sc.on{display:flex}
+.sh{background:var(--pn);border-bottom:1px solid var(--bd);padding:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}.sh label{font-size:12px;display:flex;gap:4px;align-items:center}.sh input[type=text]{width:110px;font:inherit;padding:4px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:7px}
+.sbd{flex:1;display:flex;min-height:0}#sth{width:92px;overflow:auto;background:var(--pn);border-inline-end:1px solid var(--bd);padding:6px}#sth div{margin-bottom:8px;border:2px solid transparent;border-radius:6px;text-align:center;font-size:11px;cursor:pointer}#sth div.on{border-color:var(--ac)}#sth canvas{max-width:100%;display:block;margin:auto}
+#smn{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:10px;position:relative;min-height:0}#scv{max-width:100%;max-height:100%;box-shadow:0 2px 12px #0003;touch-action:none;background:#fff}#sem{position:absolute;opacity:.7;text-align:center;padding:20px}
+@media(max-width:800px){.sbd{flex-direction:column}#sth{width:auto;height:84px;display:flex;gap:6px;overflow-x:auto;flex:none}#sth div{flex:none;margin:0}}
+.tool-pen .lay,.tool-sigrep .lay{cursor:crosshair;touch-action:none}.tool-pen .o{pointer-events:none}#sgl{margin-top:6px;max-width:330px}
+header{flex-direction:column;align-items:stretch;gap:4px}.top,.rg{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.rg{display:none}.rg.on{display:flex}.tabs{display:flex;gap:4px;margin-inline-start:auto}.tabs button{border-radius:7px 7px 0 0}.tabs button.on{background:var(--ac);color:#fff}
+#drop h2{font-size:22px}.chips{display:flex;flex-wrap:wrap;gap:5px;padding:6px 8px;border-top:1px solid var(--bd)}.chips button{font-size:12px;padding:3px 8px;border-radius:14px}#fdl div{padding:4px;cursor:pointer;border-bottom:1px solid var(--bd)}#fdl div:hover{background:var(--bg)}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Tajawal:wght@400;700&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Noto+Serif:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head><body>
+<header><select id="ui" onchange="setUI(this.value)"><option value="ar">العربية</option><option value="en">English</option><option value="de">Deutsch</option></select><button class="pri" onclick="scOpen()" title="Scanner">SCAN</button><button onclick="fdOpen()" title="Ctrl+F">🔍</button><button onclick="undo()" title="Ctrl+Z">↶ تراجع</button><button onclick="redo()" title="Ctrl+Y">↷ إعادة</button><span class="sep"></span>
+<button class="pri" onclick="$('#f').click()">📂 فتح PDF/صورة</button><button onclick="$('#f2').click()">➕ دمج ملف</button>
+<span class="sep"></span>
+<button id="t-select" class="on" onclick="setTool('select')">تحديد</button><button id="t-edit" onclick="setTool('edit')">✏️ تعديل نص موجود</button><button id="t-text" onclick="setTool('text')">T نص</button><button id="t-cover" onclick="setTool('cover')">▭ تغطية/حذف</button>
+<button onclick="$('#fi').click()">🖼 صورة</button><button onclick="sigOpen()">✍️ توقيع</button><button id="t-pen" onclick="setTool('pen')">✒️ قلم</button><input id="pc" type="color" value="#0a2a6b" title="لون القلم"><select id="pw" title="سماكة"><option value="1.5">رفيع</option><option value="3" selected>متوسط</option><option value="6">سميك</option></select><button id="t-sigrep" onclick="setTool('sigrep');toast('حدّد بمستطيل مكان التوقيع القديم')">🔁 استبدال توقيع</button><button onclick="autoSign()">🎯 توقيع تلقائي</button><button onclick="sigColor()">🎨 تلوين التوقيع</button>
+<span class="sep"></span>
+<select id="ff"><optgroup label="العربية"><option>Cairo</option><option>Amiri</option><option>Noto Naskh Arabic</option><option>Tajawal</option></optgroup><optgroup label="English / Deutsch"><option>Roboto</option><option>Open Sans</option><option>Noto Serif</option><option>Lato</option></optgroup><optgroup label="System"><option>Tahoma</option><option>Arial</option><option>Times New Roman</option><option>Courier New</option><option>Georgia</option></optgroup></select>
+<input id="fs" type="number" value="16" min="6" max="120" title="حجم الخط"><input id="fc" type="color" value="#000000"><button id="fb">B</button>
+<button onclick="rmBg()">إزالة خلفية الصورة</button><button onclick="delSel()">🗑 حذف العنصر</button>
+<span class="sep"></span>
+<button onclick="addPage()">+ صفحة</button><button onclick="dup()">⧉ نسخ</button><button onclick="rot()">⟳ تدوير</button><button onclick="delPage()">🗑 حذف الصفحة/المحدد</button><button onclick="selAll()">☑ تحديد الكل</button><button onclick="mv(-1)">↑</button><button onclick="mv(1)">↓</button>
+<span class="sep"></span>
+<select id="cm" title="نوع التنظيف"><option value="bw">أبيض وأسود (نص أسود فقط)</option><option value="soft">رمادي نظيف</option><option value="">إلغاء التنظيف</option></select><button onclick="cleanPages(0)" title="يطبَّق على الصفحات المؤشَّر عليها أو الحالية">🧹 تنظيف الخلفية</button><button onclick="cleanPages(1)">للكل</button><span class="sep"></span><button onclick="zm(-.15)">−</button><button onclick="zm(.15)">+</button><button onclick="fit()">⇔ ملاءمة</button><span id="pi"></span>
+<span class="sep"></span>
+<button class="pri" onclick="saveAs('pdf')">💾 حفظ</button><button onclick="sas()">📑 حفظ باسم…</button>
+<select id="ex" onchange="saveAs(this.value);this.selectedIndex=0"><option value="">تصدير/تحويل…</option><option value="html">Word (يفتح في Word)</option><option value="txt">نص TXT</option><option value="md">Markdown</option><option value="png">صورة PNG للصفحة</option></select>
+<button onclick="spOpen()">✂ تقطيع PDF</button><button onclick="ocOpen()">📝 PDF→نص</button><button onclick="$('#tl').showModal()">🧰 أدوات إضافية</button><button onclick="$('#ai').classList.toggle('show')">🤖 الذكاء الاصطناعي</button>
+<input id="f" type="file" accept="application/pdf,image/*" hidden><input id="f2" type="file" accept="application/pdf,image/*" hidden><input id="fi" type="file" accept="image/*" hidden>
+</header>
+<main>
+<div id="th"></div>
+<div id="view"><div id="drop"><div style="font-size:42px">📄✨</div><h2 style="margin:6px 0">مرحباً! أنا بيدي 👋</h2><p style="margin:4px 0 14px">محرر PDF ذكي: عدّل، وقّع، امسح ضوئياً، ترجم، وقطّع.</p><p><button class="pri" onclick="$('#f').click()">📂 افتح ملفاً</button> <button onclick="scOpen()">📷 امسح مستنداً</button> <button onclick="newDoc()">📄 صفحة بيضاء</button></p><small>اسحب ملف PDF أو صورة هنا، أو اضغط «فتح».<br>كل المعالجة تتم في متصفحك، ولا يُرسل الملف لأي خادم (عدا طلبات الذكاء الاصطناعي).</small></div></div>
+<aside id="ai"><div id="qa">
+<button onclick="act('translate')">ترجمة</button><select id="lg"><option>العربية</option><option>English</option><option>Deutsch</option><option>Français</option><option>Türkçe</option><option>Español</option></select>
+<button onclick="act('proof')">تدقيق</button><button onclick="act('format')">تنسيق</button><button onclick="act('ocr')">OCR (صورة→نص)</button></div>
+<div id="log"><div class="m">أنا مساعدك الكامل: أنفّذ أي تعديل على الملف (تنسيق، نصوص، صفحات، تنظيف، حفظ…). اطلب ما تشاء.</div></div>
+<div id="q"><button onclick="$('#asg').click()" title="أرفق صورة توقيع">📎</button><input id="asg" type="file" accept="image/*" hidden><textarea id="qi" placeholder="اكتب طلبك…"></textarea><button class="pri" onclick="send()">إرسال</button></div></aside>
+</main><dialog id="sa"><b>حفظ باسم</b><p><input id="sn" style="font:inherit;padding:5px;border-radius:7px"> <select id="sf"><option value="pdf">PDF</option><option value="html">Word (HTML)</option><option value="txt">TXT</option><option value="md">Markdown</option><option value="png">PNG</option></select></p><p><button class="pri" onclick="sasOk()">حفظ</button> <button onclick="$('#sa').close()">إلغاء</button></p></dialog><div id="ts"></div>
+<dialog id="sd"><b>ارسم توقيعك</b><canvas id="sg" width="320" height="140"></canvas><div id="sgl"></div><p><button onclick="$('#fsg').click()">📷 توقيع من صورة</button><input id="fsg" type="file" accept="image/*" hidden></p><p><button onclick="sigClr()">مسح</button> <button class="pri" onclick="sigOk()">إضافة</button> <button onclick="$('#sd').close()">إلغاء</button></p></dialog>
+<div id="sc"><div class="sh"><button onclick="scClose()">← المحرر</button><b>SCAN</b>
+<button class="pri" onclick="scCam()">📷 كاميرا</button><button onclick="$('#sfl').click()">🖼 من الصور</button><span class="sep"></span>
+<button onclick="scMode()">✂️ اقتصاص</button><button onclick="scAuto()">✨ كشف الحواف</button>
+<select id="sfi" onchange="scF(this.value)"><option value="magic">تحسين تلقائي</option><option value="orig">أصلي</option><option value="bw">أبيض وأسود (نص أسود فقط)</option><option value="gray">رمادي</option><option value="soft">رمادي نظيف</option></select><button onclick="scF($('#sfi').value,1)">تطبيق على الكل</button>
+<button onclick="scRot()">⟳</button><button onclick="scDup()">⧉</button><button onclick="scMv(-1)">◀</button><button onclick="scMv(1)">▶</button><button onclick="scDel()">🗑</button><span class="sep"></span>
+<label>السطوع <input id="sbr" type="range" min="-60" max="60" value="0" oninput="scBC()"></label><label>التباين <input id="sct" type="range" min="-50" max="80" value="0" oninput="scBC()"></label><span class="sep"></span>
+<button onclick="scOcr(0)">📝 استخراج النص (OCR)</button><select id="spz"><option value="auto">حجم الصفحة تلقائي</option><option value="a4">A4</option></select><input id="swm" type="text" placeholder="علامة مائية…">
+<button class="pri" onclick="scExp('pdf')">💾 تصدير PDF</button><select onchange="scExp(this.value);this.selectedIndex=0"><option value="">خيارات أخرى…</option><option value="jpg">صورة JPG للصفحة</option><option value="txt">نص كل الصفحات (OCR)</option><option value="id">بطاقة هوية (وجهان في A4)</option><option value="editor">📤 إلى المحرر</option></select></div>
+<div class="sbd"><div id="sth"></div><div id="smn"><canvas id="scv"></canvas><div id="sem">ابدأ بالتقاط صورة أو اختيار صور من الجهاز</div></div></div></div>
+<dialog id="cd"><video id="cvid" autoplay playsinline muted style="max-width:86vw;max-height:60vh"></video><p><button class="pri" onclick="scSnap()">التقاط</button> <button onclick="camOff()">تم</button></p></dialog>
+<dialog id="so"><textarea id="sot" style="width:min(520px,80vw);height:240px;font:inherit;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:7px"></textarea><p><button onclick="navigator.clipboard?.writeText($('#sot').value)">نسخ</button> <button onclick="putFile(new Blob([$('#sot').value],{type:'text/plain'}),'scan.txt')">حفظ TXT</button> <select id="slg"><option>English</option><option>العربية</option><option>Deutsch</option><option>Français</option><option>Türkçe</option><option>Español</option></select><button onclick="scTr()">ترجم النص</button> <button onclick="$('#so').close()">إغلاق</button></p></dialog>
+<input id="sfl" type="file" accept="image/*" multiple hidden><input id="sfc" type="file" accept="image/*" capture="environment" hidden>
+<dialog id="sp"><b>تقطيع PDF</b><p>عدد الصفحات الحالي: <b id="spn"></b></p>
+<p><label><input type="radio" name="sm" value="n" checked onchange="spUp()"> عدد الأقسام</label> <input id="spa" type="number" min="2" value="4" oninput="spUp()" style="width:70px"> (بالتساوي)</p>
+<p><label><input type="radio" name="sm" value="k" onchange="spUp()"> صفحات في كل قسم</label> <input id="spk" type="number" min="1" value="100" oninput="spUp()" style="width:70px"></p>
+<p><label><input type="radio" name="sm" value="m" onchange="spUp()"> نطاقات يدوية</label> <input id="spm" placeholder="1-120, 121-300, 301-500" oninput="spUp()" style="width:260px;max-width:70vw"></p>
+<div id="spl" style="max-height:160px;overflow:auto;font-size:12px;background:var(--bg);padding:6px;border-radius:7px"></div>
+<p><label><input type="checkbox" id="spzip"> ملفات منفصلة بدل ZIP</label></p>
+<p><button class="pri" onclick="spGo()">✂ قطّع وحفظ</button> <button onclick="spSel()">استخراج الصفحات المؤشَّر عليها</button> <button onclick="CANCEL=1">إلغاء</button> <button onclick="$('#sp').close()">إغلاق</button> <span id="sps"></span></p></dialog>
+<dialog id="oc"><b>تحويل PDF الصور إلى نص</b><p>من صفحة <input id="ofr" type="number" min="1" value="1" style="width:70px"> إلى <input id="oto" type="number" min="1" style="width:70px"> <select id="ol"><option value="ara+deu+eng">تلقائي (عربي/ألماني/إنجليزي)</option><option value="ara">العربية</option><option value="deu">Deutsch</option><option value="eng">English</option><option value="fra">Français</option><option value="tur">Türkçe</option><option value="spa">Español</option></select></p>
+<p><label><input type="checkbox" id="oex" checked> استخدم النص الموجود إن وُجد (أسرع)</label></p>
+<textarea id="ot" style="width:min(560px,82vw);height:220px;font:inherit;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:7px"></textarea>
+<p><button class="pri" onclick="ocGo()">▶ ابدأ</button> <button onclick="CANCEL=1">إلغاء</button> <span id="ops"></span></p>
+<p><button onclick="putFile(new Blob([$('#ot').value],{type:'text/plain'}),docName+'.txt')">حفظ TXT</button> <button onclick="ocDoc()">حفظ Word</button> <button class="pri" onclick="ocPdf()">📄 حفظ PDF قابل للبحث</button> <button onclick="navigator.clipboard?.writeText($('#ot').value)">نسخ</button> <button onclick="$('#oc').close()">إغلاق</button></p></dialog>
+<dialog id="tl"><b>أدوات إضافية</b><p><button onclick="tlNum()"># ترقيم الصفحات</button> <button onclick="tlRev()">⇅ عكس ترتيب الصفحات</button></p>
+<p><input id="twm" placeholder="نص العلامة المائية" style="font:inherit;padding:5px;border-radius:7px"> <button onclick="tlWm()">💧 علامة مائية لكل الصفحات</button></p>
+<p><select id="tq"><option value="1.4|.7">ضغط متوسط</option><option value="1|.5">ضغط عالٍ (حجم أصغر)</option><option value="2|.88">ضغط خفيف</option></select> <button onclick="tlCmp()">🗜 ضغط الملف</button> <button onclick="CANCEL=1">إلغاء</button></p>
+<p><button onclick="navigator.clipboard?.writeText(report());toast('تم نسخ التقرير')">🩺 نسخ تقرير تشخيصي</button></p><p><button onclick="$('#tl').close()">إغلاق</button> <span id="tls"></span></p></dialog>
+<dialog id="fd"><b>🔍 بحث في الملف</b><p><input id="fdq" style="font:inherit;padding:5px;border-radius:7px;width:min(320px,70vw)" onkeydown="if(event.key=='Enter')fdGo()"> <button class="pri" onclick="fdGo()">بحث</button> <button onclick="$('#fd').close()">إغلاق</button></p><div id="fdl" style="max-height:260px;overflow:auto;font-size:12px;max-width:min(520px,82vw)"></div></dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="shim.js?v=9"></script>
+<script>
+const $=s=>document.querySelector(s);let CANCEL=0,PG=()=>{},LG=[],FORCE=0,docName='document',dirty=0,BULK=0,UI='ar',U=[],Rd=[],NP=0,chk=new Set(),srcs=[],pages=[],cur=0,zoom=1.3,tool='select',sel=null,tok=0,hist=[],bold=false;
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+(async()=>{try{const u=pdfjsLib.GlobalWorkerOptions.workerSrc,t=await(await fetch(u)).text();pdfjsLib.GlobalWorkerOptions.workerSrc=URL.createObjectURL(new Blob([t],{type:'text/javascript'}))}catch(e){}})();
+const PDFO={standardFontDataUrl:'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/standard_fonts/',cMapUrl:'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/',cMapPacked:true};
+const toast=(t,ms)=>{const e=$('#ts');e.onclick=()=>e.style.display='none';e.textContent=tr(t);e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',ms||3500)};
+function log(t,c){const d=document.createElement('div');d.className='m '+(c||'');d.textContent=c=='u'?t:tr(t);$('#log').append(d);$('#log').scrollTop=1e9;return d}
+function setTool(t){tool=t;document.querySelectorAll('[id^=t-]').forEach(b=>b.classList.toggle('on',b.id=='t-'+t));$('#view').className=''; $('#view').classList.add('tool-'+t)}
+const rd=f=>new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsArrayBuffer(f)});
+const rdu=f=>new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});
+function toPng(url,max=2000){return new Promise(r=>{const i=new Image();i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r({u:c.toDataURL(),w:c.width,h:c.height})};i.src=url})}
+async function load(f){
+ if(f.type.startsWith('image/')){const p=await toPng(await rdu(f));const w=595,h=Math.round(w*p.h/p.w);pages.push({s:-1,i:0,w,h,objs:[{t:'img',x:0,y:0,w,h,src:p.u}]});return}
+ const bytes=new Uint8Array(await rd(f)),doc=await pdfjsLib.getDocument({data:bytes.slice(),...PDFO}).promise,s=srcs.push({bytes,doc})-1;
+ const p1=await doc.getPage(1),v=p1.getViewport({scale:1});
+ for(let i=0;i<doc.numPages;i++)pages.push({s,i,w:v.width,h:v.height,objs:[]})}
+async function open(files,keep){if(!keep)docName=files[0].name.replace(/\.[^.]+$/,'');for(const f of files)await load(f);if(!keep)cur=0;thumbs();show(keep?pages.length-1:0);window.rbTab?.('edit')}
+$('#f').onchange=e=>{srcs=[];pages=[];open(e.target.files);e.target.value=''};$('#f2').onchange=e=>{open(e.target.files,1);e.target.value=''};
+addEventListener('dragover',e=>e.preventDefault());addEventListener('drop',e=>{e.preventDefault();if(e.dataTransfer.files.length){srcs=[];pages=[];open(e.dataTransfer.files)}});
+let io;function thumbs(){const t=$('#th');t.innerHTML='';io?.disconnect();io=new IntersectionObserver(es=>es.forEach(async e=>{if(!e.isIntersecting)return;io.unobserve(e.target);const n=+e.target.dataset.n,p=pages[n];if(p.s<0)return;const pg=await srcs[p.s].doc.getPage(p.i+1),vp=pg.getViewport({scale:.22}),c=e.target.querySelector('canvas');c.width=vp.width;c.height=vp.height;pg.render({canvasContext:c.getContext('2d'),viewport:vp})}),{root:t});
+ pages.forEach((p,n)=>{const d=document.createElement('div');d.dataset.n=n;d.className=n==cur?'on':'';d.innerHTML='<canvas width=80 height=110></canvas><label><input type=checkbox '+(chk.has(n)?'checked':'')+'> '+(n+1)+'</label>';d.querySelector('input').onclick=e=>{e.stopPropagation();e.target.checked?chk.add(n):chk.delete(n)};d.onclick=()=>show(n);t.append(d);io.observe(d)})}
+async function show(n){if(!pages.length)return;sel=null;cur=Math.max(0,Math.min(n,pages.length-1));const t=++tok,p=pages[cur];
+ document.querySelectorAll('#th div').forEach((d,i)=>d.classList.toggle('on',i==cur));$('#pi').textContent=(cur+1)+' / '+pages.length;
+ const cv=document.createElement('canvas'),x=cv.getContext('2d');
+ if(p.s<0){cv.width=p.w*zoom;cv.height=p.h*zoom;x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);p.tc=null}
+ else{const pg=await srcs[p.s].doc.getPage(p.i+1),vp=pg.getViewport({scale:zoom,rotation:(pg.rotate+(p.rot||0))%360});p.w=vp.width/zoom;p.h=vp.height/zoom;cv.width=vp.width;cv.height=vp.height;await pg.render({canvasContext:x,viewport:vp}).promise;if(t!=tok)return;p.tc=await pg.getTextContent();if(p.clean)clean(cv,p.clean)}
+ const sh=document.createElement('div'),lay=document.createElement('div');sh.className='sheet';lay.className='lay';sh.append(cv,lay);$('#view').replaceChildren(sh);lay.cv=cv;lay.onpointerdown=lp;p.objs.forEach(o=>mk(o,lay));setTool(tool)}
+function mk(o,lay){const e=document.createElement('div');e.className='o '+o.t;o.el=e;pos(o);
+ if(o.t=='text'){e.textContent=o.txt;e.style.color=o.col;e.style.fontFamily=o.font;e.style.fontWeight=o.b?'bold':'normal';e.ondblclick=()=>{if(!NP)push();e.contentEditable=true;e.focus()};e.onblur=()=>{e.contentEditable=false;o.txt=e.innerText};e.oninput=()=>o.txt=e.innerText}
+ else if(o.t=='img'){const i=new Image();i.src=o.src;e.append(i)}else e.style.background=o.col;
+ const r=document.createElement('i');r.className='rz';e.append(r);
+ e.onpointerdown=ev=>{if(e.isContentEditable)return;ev.stopPropagation();push();pick(o);o.ink=null;const rz=ev.target==r,sx=ev.clientX,sy=ev.clientY,ox=o.x,oy=o.y,ow=o.w,oh=o.h;
+  const mv=m=>{const dx=(m.clientX-sx)/zoom,dy=(m.clientY-sy)/zoom;if(rz){o.w=Math.max(10,ow+dx);if(o.t=='img')o.h=oh*o.w/ow;else if(o.t!='text')o.h=Math.max(10,oh+dy)}else{o.x=ox+dx;o.y=oy+dy}pos(o)};
+  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up)};addEventListener('pointermove',mv);addEventListener('pointerup',up)};
+ lay.append(e);return e}
+function pos(o){const e=o.el,z=zoom;e.style.left=o.x*z+'px';e.style.top=o.y*z+'px';e.style.width=o.w*z+'px';if(o.t=='text'){e.style.fontSize=o.sz*z+'px';e.style.minHeight=o.sz*1.3*z+'px'}else e.style.height=o.h*z+'px'}
+function pick(o){sel=o;document.querySelectorAll('.o').forEach(e=>e.classList.toggle('sel',e==o?.el));if(o?.t=='text'){$('#fs').value=o.sz;$('#fc').value=o.col;$('#ff').value=o.font}}
+function addObj(o){if(!NP)push();const p=pages[cur];p.objs.push(o);const l=document.querySelector('.lay');if(l){mk(o,l);pick(o)}return o}
+const newText=(x,y,txt,sz,w,col,font)=>({t:'text',x,y,w:w||200,txt:txt||'نص جديد',sz:sz||+$('#fs').value,col:col||$('#fc').value,font:font||$('#ff').value,b:bold});
+function lp(ev){const lay=ev.currentTarget,r=lay.getBoundingClientRect(),x=(ev.clientX-r.left)/zoom,y=(ev.clientY-r.top)/zoom,p=pages[cur];pick(null);if(tool=='pen')return penStart(ev,lay);
+ if(tool=='text'){const o=addObj(newText(x,y));NP=1;o.el.ondblclick();NP=0;setTool('select')}
+ else if(tool=='cover'){const o=addObj({t:'cover',x,y,w:4,h:4,col:'#ffffff'}),mv=m=>{o.w=Math.max(4,(m.clientX-r.left)/zoom-x);o.h=Math.max(4,(m.clientY-r.top)/zoom-y);o.el.style.width=o.w*zoom+'px';o.el.style.height=o.h*zoom+'px'},up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);setTool('select')};addEventListener('pointermove',mv);addEventListener('pointerup',up)}
+ else if(tool=='sigrep'){if(!curSig)curSig=SG()[0];if(!curSig){setTool('select');toast('أضف توقيعاً أولاً (✍️ توقيع)');return sigOpen()}dragRect(r,x,y,async o=>{const g=lay.cv.getContext('2d').getImageData(Math.max(0,(o.x-3)*zoom),Math.max(0,(o.y+o.h/2)*zoom),1,1).data;if(g[0]*.3+g[1]*.59+g[2]*.11>120)o.col='#'+[...g].slice(0,3).map(v=>v.toString(16).padStart(2,'0')).join('');const im=await loadImg(curSig),f=Math.min(o.w/im.width,o.h/im.height)*.95,w=im.width*f,h=im.height*f;NP=1;addObj({t:'img',x:o.x+(o.w-w)/2,y:o.y+(o.h-h)/2,w,h,src:curSig});NP=0;setTool('select')})}
+ else if(tool=='edit'&&p.tc&&!p.rot){const it=p.tc.items.find(i=>{const s=Math.hypot(i.transform[0],i.transform[1]),t=p.h-i.transform[5];return i.str.trim()&&x>=i.transform[4]-2&&x<=i.transform[4]+i.width+2&&y>=t-s&&y<=t+s*.3});if(it)editItem(p,it,lay.cv)}}
+function editItem(p,it,cv,rep){if(!BULK)push();NP=1;const s=Math.hypot(it.transform[0],it.transform[1]),x=it.transform[4],y=p.h-it.transform[5]-s*.85,h=s*1.25;
+ const g=cv.getContext('2d').getImageData(Math.max(0,(x-3)*zoom),Math.max(0,(y+h/2)*zoom),1,1).data,col='#'+[...g].slice(0,3).map(v=>v.toString(16).padStart(2,'0')).join('');
+ const c=addObj({t:'cover',x:x-1,y:y-1,w:it.width+3,h:h+2,col}),o=addObj(newText(x,y,rep??it.str,s,it.width+30,'#000000'));
+ if(rep==null){o.el.ondblclick();getSelection().selectAllChildren(o.el)}NP=0;return o}
+$('#fb').onclick=()=>{bold=!bold;$('#fb').classList.toggle('on',bold);if(sel?.t=='text'){sel.b=bold;sel.el.style.fontWeight=bold?'bold':'normal'}};
+['fs','fc','ff'].forEach(k=>$('#'+k).oninput=()=>{if(sel?.t!='text')return;sel.sz=+$('#fs').value;sel.col=$('#fc').value;sel.font=$('#ff').value;sel.el.style.color=sel.col;sel.el.style.fontFamily=sel.font;pos(sel)});
+function delSel(){if(!sel)return;push();pages[cur].objs=pages[cur].objs.filter(o=>o!=sel);sel.el.remove();sel=null}
+addEventListener('keydown',e=>{if(e.target.isContentEditable||/INPUT|TEXTAREA/.test(e.target.tagName))return;const c=e.ctrlKey||e.metaKey,k=e.key.toLowerCase();if(k=='delete'&&sel)delSel();else if(c&&k=='z'){e.preventDefault();undo()}else if(c&&k=='y'){e.preventDefault();redo()}else if(c&&k=='s'){e.preventDefault();e.shiftKey?sas():saveAs('pdf')}});
+$('#fi').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f||!pages.length)return;const p=await toPng(await rdu(f),1600),w=Math.min(200,pages[cur].w/2);addObj({t:'img',x:40,y:40,w,h:w*p.h/p.w,src:p.u})};
+function rmBg(){if(sel?.t!='img')return toast('اختر صورة أولاً.');push();const i=new Image();i.onload=()=>{const c=document.createElement('canvas');c.width=i.width;c.height=i.height;const x=c.getContext('2d');x.drawImage(i,0,0);const d=x.getImageData(0,0,c.width,c.height),a=d.data;
+ const bg=[a[0],a[1],a[2]];for(let k=0;k<a.length;k+=4){const df=Math.max(Math.abs(a[k]-bg[0]),Math.abs(a[k+1]-bg[1]),Math.abs(a[k+2]-bg[2]));if(df<45)a[k+3]=0;else if(df<80)a[k+3]=(df-45)/35*255}x.putImageData(d,0,0);sel.src=c.toDataURL();sel.el.querySelector('img').src=sel.src};i.src=sel.src}
+let sx,dr=0;const sg=$('#sg'),sc=sg.getContext('2d');
+function sigOpen(){if(!pages.length)return;sgList();sigClr();$('#sd').showModal()}function sigClr(){sc.clearRect(0,0,320,140)}
+sg.onpointerdown=e=>{dr=1;sg.setPointerCapture(e.pointerId);sc.beginPath();sc.moveTo(e.offsetX,e.offsetY)};sg.onpointermove=e=>{if(!dr)return;sc.lineWidth=2.5;sc.lineCap='round';sc.strokeStyle='#0a2a6b';sc.lineTo(e.offsetX,e.offsetY);sc.stroke()};sg.onpointerup=()=>dr=0;
+function sigOk(){const t=trim(sg);$('#sd').close();if(!t)return;const u=t.toDataURL();sgSave(u);placeSig(u)}
+function zm(d){zoom=Math.max(.5,Math.min(3,zoom+d));show(cur)}
+const snap=()=>pages.map(p=>({...p,tc:null,objs:p.objs.map(({el,...r})=>r)}));
+function push(){dirty=1;ttl();U.push(snap());if(U.length>40)U.shift();Rd=[]}
+function back(a,b){if(!a.length)return toast('لا يوجد شيء للتراجع عنه.');b.push(snap());pages=a.pop().map(p=>({...p,objs:p.objs.map(o=>({...o}))}));cur=Math.min(cur,pages.length-1);chk.clear();thumbs();show(cur)}
+function undo(){back(U,Rd)}function redo(){back(Rd,U)}
+function addPage(){push();pages.splice(cur+1,0,{s:-1,i:0,w:595,h:842,objs:[]});chk.clear();thumbs();show(cur+1)}
+function delPage(){delPages(chk.size?[...chk]:[cur])}
+function delPages(L){if(L.length>=pages.length)return toast('لا يمكن حذف كل الصفحات.');if(!confirm(tr('حذف الصفحات المحددة؟')+' ('+L.length+')'))return;push();pages=pages.filter((_,i)=>!L.includes(i));chk.clear();thumbs();show(Math.min(cur,pages.length-1))}
+function selAll(){if(chk.size==pages.length)chk.clear();else pages.forEach((_,i)=>chk.add(i));thumbs()}
+function mv(d){const j=cur+d;if(j<0||j>=pages.length)return;push();[pages[cur],pages[j]]=[pages[j],pages[cur]];chk.clear();thumbs();show(j)}
+function dup(){if(!pages.length)return;push();const p=pages[cur];pages.splice(cur+1,0,{...p,tc:null,objs:p.objs.map(({el,...r})=>r)});chk.clear();thumbs();show(cur+1)}
+function rot(){const p=pages[cur];if(!p||p.s<0||p.objs.length)return toast('التدوير متاح للصفحات الأصلية التي لا تحمل عناصر مضافة.');push();p.rot=((p.rot||0)+90)%360;show(cur)}
+function fit(){if(!pages.length)return;zoom=Math.max(.5,Math.min(3,($('#view').clientWidth-30)/pages[cur].w));show(cur)}
+function clean(cv,m){const W=cv.width,Hh=cv.height,x=cv.getContext('2d'),d=x.getImageData(0,0,W,Hh),a=d.data,n=W*Hh,g=new Float32Array(n),B=Math.max(24,W>>5),bw=Math.ceil(W/B),bg=new Uint8Array(bw*Math.ceil(Hh/B)),h=new Array(256).fill(0);
+ for(let i=0;i<n;i++){const v=a[i*4]*.299+a[i*4+1]*.587+a[i*4+2]*.114;g[i]=v;const k=((i/W|0)/B|0)*bw+((i%W)/B|0);if(v>bg[k])bg[k]=v}
+ for(let i=0;i<n;i++){const k=((i/W|0)/B|0)*bw+((i%W)/B|0),v=Math.min(255,g[i]*255/Math.max(bg[k],110));g[i]=v;h[v|0]++}
+ let sum=0;for(let t=0;t<256;t++)sum+=t*h[t];let sB=0,wB=0,mx=0,th=128;for(let t=0;t<256;t++){wB+=h[t];if(!wB)continue;const wF=n-wB;if(!wF)break;sB+=t*h[t];const v=wB*wF*(sB/wB-(sum-sB)/wF)**2;if(v>mx){mx=v;th=t}}
+ for(let i=0;i<n;i++){const v=g[i],o=m=='bw'?(v>th?255:0):(v>th?255:v*.45);a[i*4]=a[i*4+1]=a[i*4+2]=o;a[i*4+3]=255}x.putImageData(d,0,0)}
+function cleanImg(o,m){return new Promise(r=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');c.width=i.width;c.height=i.height;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0);clean(c,m);o.src=c.toDataURL();r()};i.src=o.src})}
+async function cleanPages(all){if(!pages.length)return;const m=$('#cm').value,L=all?pages.map((_,i)=>i):chk.size?[...chk]:[cur];push();toast('جارٍ التنظيف…');
+ for(const n of L){const p=pages[n];if(p.s>=0)p.clean=m||null;else if(m)for(const o of p.objs)if(o.t=='img'&&o.w>=p.w*.6)await cleanImg(o,m)}
+ await show(cur);toast(m?tr('تم التنظيف')+' ('+L.length+')':'أُلغي التنظيف')}
+// ---- export
+const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255);
+const F=(o,S)=>`${o.b?'bold ':''}${o.sz*S}px "${o.font}"`;
+async function fontsFor(L){const f=new Set();L.forEach(p=>p.objs.forEach(o=>{if(o.t=='text')f.add(o.font)}));await Promise.all([...f].map(n=>document.fonts.load('16px "'+n+'"','Aa مرحبا äöüß').catch(()=>0)));await document.fonts.ready}
+function rast(o){const S=3,c=document.createElement('canvas'),x=c.getContext('2d'),W=Math.ceil(o.w*S),lh=o.sz*1.3*S;x.font=F(o,S);const L=[];
+ for(const para of o.txt.split('\n')){const r=/[\u0590-\u06FF]/.test(para);let cu='';for(const wd of para.split(' ')){const t=cu?cu+' '+wd:wd;if(x.measureText(t).width>W&&cu){L.push([cu,r]);cu=wd}else cu=t}L.push([cu,r])}
+ c.width=W;c.height=Math.ceil(Math.max(1,L.length)*lh);x.font=F(o,S);x.fillStyle=o.col;x.textBaseline='middle';L.forEach(([t,r],i)=>{x.direction=r?'rtl':'ltr';x.textAlign=r?'right':'left';x.fillText(t,r?W:0,i*lh+lh/2)});return{u:c.toDataURL(),h:c.height/S}}
+const b64=u=>Uint8Array.from(atob(u.split(',')[1]),c=>c.charCodeAt(0));
+const tick=()=>new Promise(r=>setTimeout(r)),LOG=m=>LG.push(((performance.now()/1000)|0)+'s '+m);
+async function build(PL=pages,hk){await fontsFor(PL);const{PDFDocument,rgb}=PDFLib,out=await PDFDocument.create(),N=PL.length,cp={},ch=[],used=new Set();
+ const ras=async p=>{const pj=await srcs[p.s].doc.getPage(p.i+1),vp=pj.getViewport({scale:2,rotation:(pj.rotate+(p.rot||0))%360}),c=document.createElement('canvas');c.width=vp.width;c.height=vp.height;await pj.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;if(p.clean)clean(c,p.clean);const g=out.addPage([vp.width/2,vp.height/2]);g.drawImage(await out.embedPng(b64(c.toDataURL())),{x:0,y:0,width:vp.width/2,height:vp.height/2});return g};
+ if(!FORCE){const need={};PL.forEach(p=>{if(p.s>=0&&!p.clean)(need[p.s]??=new Set()).add(p.i)});
+  for(const k in need){try{LOG('copy src'+k+' '+need[k].size+' pages');ch[k]=await PDFDocument.load(srcs[k].bytes,{ignoreEncryption:true});const ids=[...need[k]],pg=await out.copyPages(ch[k],ids);ids.forEach((id,m)=>cp[k+':'+id]=pg[m])}catch(e){LOG('copy failed: '+e.message)}}}
+ for(let n=0;n<N;n++){const p=PL[n];if(CANCEL)throw Error('cancelled');PG(n+1,N);await tick();let pg;const key=p.s+':'+p.i;
+  if(p.s>=0&&cp[key]&&!FORCE){pg=cp[key];if(used.has(key))[pg]=await out.copyPages(ch[p.s],[p.i]);used.add(key);out.addPage(pg);if(p.rot)pg.setRotation(PDFLib.degrees((pg.getRotation().angle+p.rot)%360))}
+  else if(p.s>=0)pg=await ras(p);else pg=out.addPage([p.w,p.h]);
+  const H=pg.getHeight();for(const o of p.objs){if(o.t=='cover')pg.drawRectangle({x:o.x,y:H-o.y-o.h,width:o.w,height:o.h,color:rgb(...hex(o.col))});
+   else{let u=o.src,h=o.h;if(o.t=='text'){if(!o.txt.trim())continue;const r=rast(o);u=r.u;h=r.h}pg.drawImage(await out.embedPng(b64(u)),{x:o.x,y:H-o.y-h,width:o.w,height:h})}}if(hk)await hk(pg,p,out,H)}
+ LOG('saving doc');return out.save()}
+async function pageText(n){const p=pages[n];if(p.s<0)return p.objs.filter(o=>o.t=='text').map(o=>o.txt).join('\n');const tc=await(await srcs[p.s].doc.getPage(p.i+1)).getTextContent();let y=null,s='';for(const i of tc.items){if(y!==null&&Math.abs(i.transform[5]-y)>3)s+='\n';else if(s&&!s.endsWith(' '))s+=' ';s+=i.str;y=i.transform[5]}return s+'\n'+p.objs.filter(o=>o.t=='text').map(o=>o.txt).join('\n')}
+function mkPdf(P){const enc=new TextEncoder(),parts=[],off=[];let len=0;const add=x=>{const b=typeof x=='string'?enc.encode(x):x;parts.push(b);len+=b.length},obj=(n,b)=>{off[n]=len;add(n+' 0 obj\n'+b+'\nendobj\n')};add('%PDF-1.4\n');const N=P.length,T=3+N*3;
+ obj(1,'<</Type/Catalog/Pages 2 0 R>>');obj(2,'<</Type/Pages/Count '+N+'/Kids['+P.map((_,i)=>(3+i*3)+' 0 R').join(' ')+']>>');
+ P.forEach((p,i)=>{const a=3+i*3,c='q '+p.w+' 0 0 '+p.h+' 0 0 cm /I Do Q';obj(a,'<</Type/Page/Parent 2 0 R/MediaBox[0 0 '+p.w+' '+p.h+']/Resources<</XObject<</I '+(a+1)+' 0 R>>>>/Contents '+(a+2)+' 0 R>>');
+  off[a+1]=len;add((a+1)+' 0 obj\n<</Type/XObject/Subtype/Image/Width '+p.iw+'/Height '+p.ih+'/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length '+p.jpg.length+'>>\nstream\n');add(p.jpg);add('\nendstream\nendobj\n');obj(a+2,'<</Length '+c.length+'>>\nstream\n'+c+'\nendstream')});
+ const xr=len;add('xref\n0 '+T+'\n0000000000 65535 f \n');for(let n=1;n<T;n++)add(String(off[n]).padStart(10,'0')+' 00000 n \n');add('trailer\n<</Size '+T+'/Root 1 0 R>>\nstartxref\n'+xr+'\n%%EOF');return new Blob(parts,{type:'application/pdf'})}
+async function flatPdf(S=2,Q=.92){await fontsFor(pages);const P=[];for(const[n,p]of pages.entries()){if(CANCEL)throw Error('cancelled');PG(n+1,pages.length);await tick();const pj=p.s>=0?await srcs[p.s].doc.getPage(p.i+1):null,vp=pj?pj.getViewport({scale:S,rotation:(pj.rotate+(p.rot||0))%360}):null,W=Math.round(vp?vp.width:p.w*S),Hh=Math.round(vp?vp.height:p.h*S),c=document.createElement('canvas');c.width=W;c.height=Hh;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,Hh);if(pj){await pj.render({canvasContext:x,viewport:vp}).promise;if(p.clean)clean(c,p.clean)}
+  for(const o of p.objs){if(o.t=='cover'){x.fillStyle=o.col;x.fillRect(o.x*S,o.y*S,o.w*S,o.h*S)}else{let u=o.src,h=o.h;if(o.t=='text'){if(!o.txt.trim())continue;const r=rast(o);u=r.u;h=r.h}const im=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=u});x.drawImage(im,o.x*S,o.y*S,o.w*S,h*S)}}
+  P.push({w:+(W/S).toFixed(2),h:+(Hh/S).toFixed(2),iw:W,ih:Hh,jpg:b64(c.toDataURL('image/jpeg',Q))})}return mkPdf(P)}
+async function pdfData(){if(srcs.length==1&&pages.length==srcs[0].doc.numPages&&pages.every((p,k)=>p.s==0&&p.i==k&&!p.objs.length&&!p.clean&&!p.rot))return new Blob([srcs[0].bytes],{type:'application/pdf'});
+ try{return new Blob([await build()],{type:'application/pdf'})}catch(e1){console.warn(e1);LOG('build failed: '+e1.message);if(e1.message=='cancelled')throw e1;try{FORCE=1;return new Blob([await build()],{type:'application/pdf'})}catch(e2){console.warn(e2);LOG('raster build failed: '+e2.message);if(e2.message=='cancelled')throw e2;return await flatPdf()}finally{FORCE=0}}}
+const report=()=>['PDF editor save report','pages='+pages.length,'sources='+srcs.map(x=>(x.bytes.length/1e6).toFixed(1)+'MB/'+x.doc.numPages+'p').join(','),'cleanedPages='+pages.filter(p=>p.clean).length,'addedObjects='+pages.reduce((a,p)=>a+p.objs.length,0),'heap='+(performance.memory?Math.round(performance.memory.usedJSHeapSize/1e6)+'MB':'n/a'),navigator.userAgent,'log:',...LG].join('\n');
+async function saveAs(k,nm){if(!pages.length||!k)return;const name=(nm||docName)+'.'+k;let data;CANCEL=0;LG.length=0;LOG('start '+k);
+ const D=document.createElement('dialog'),B=document.createElement('div');D.append(B);D.style.minWidth='270px';D.style.maxWidth='90vw';document.body.append(D);D.showModal();
+ const sv=(m,x)=>{const e=document.createElement('div');e.textContent=tr(m)+(x?' '+x:'');B.append(e);return e},btn=(t,f)=>{const b=document.createElement('button');b.textContent=tr(t);b.style.margin='6px 4px 0 0';b.onclick=f;D.append(b);return b},done=()=>btn('إغلاق',()=>D.remove());
+ const direct=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(data);a.download=name;document.body.append(a);a.click();a.remove()};
+ const alt=()=>{if(!data)return;btn('فتح في تبويب جديد',()=>window.open(URL.createObjectURL(data),'_blank'));btn('تنزيل مباشر',direct);if(navigator.canShare?.({files:[new File([data],name,{type:data.type})]}))btn('مشاركة',()=>navigator.share({files:[new File([data],name,{type:data.type})]}).catch(()=>0))};
+ const fail=async m=>{D.querySelectorAll('button').forEach(b=>b.remove());LOG('FAIL '+m);sv('تعذّر الحفظ: ',m);alt();btn('نسخ التقرير',()=>navigator.clipboard?.writeText(report()));done();
+  const w=sv('جارٍ تحليل السبب…');try{const sp=await ai();if(!sp)return w.remove();const r=await sp('You are the diagnostics assistant of a browser-based PDF editor. A save failed. In '+LN[UI]+', briefly explain the most likely cause and the concrete fix or workaround the user can try (e.g. split the file, fewer cleaned pages, different save option). Report:\n'+report(),{cache:false,onText:t=>w.textContent=t.text});w.textContent=r.text;log(r.text)}catch(e){w.textContent=''}};
+ try{sv('جارٍ التحضير…');const pl=sv('');const cb=btn('إلغاء',()=>CANCEL=1);PG=(i,n)=>pl.textContent=tr('جارٍ المعالجة')+' '+i+' / '+n;
+  if(k=='pdf')data=await pdfData();
+  else if(k=='png')data=await new Promise(r=>document.querySelector('.lay').cv.toBlob(r));
+  else{const t=[];for(let n=0;n<pages.length;n++)t.push(await pageText(n));
+   data=k=='html'?new Blob(['<html dir="auto"><meta charset="utf-8"><body>'+t.map(x=>'<p style="page-break-after:always;white-space:pre-wrap">'+x.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</p>').join('')+'</body></html>'],{type:'text/html'}):new Blob([t.join('\n\n---\n\n')],{type:'text/plain'})}
+  cb.remove();pl.remove();sv('تم بناء الملف',Math.round(data.size/1024)+' KB');LOG('built '+data.size);
+  let dl=null;try{dl=await window.claude?.use('downloads')}catch(e){LOG('use(downloads) error '+e?.message)}
+  if(!dl){sv('ميزة التنزيل غير متاحة هنا');direct();alt();return done()}
+  sv('بانتظار موافقتك على مربع الحفظ…');
+  try{await dl.save({filename:name,data});sv('تم الحفظ ✓');if(k=='pdf'){dirty=0;ttl()}setTimeout(()=>D.remove(),2500)}
+  catch(e){if(e?.code=='declined'){sv('أُلغي الحفظ');done()}else{console.warn(e);await fail((e?.code||'')+' '+(e?.message||''))}}
+ }catch(e){console.error(e);if(e?.message=='cancelled'){D.querySelectorAll('button').forEach(b=>b.remove());sv('أُلغي الحفظ');done()}else await fail(e?.message||String(e))}}
+// ---- AI
+let sample=null,busy=0,H=[],HIST=[];
+async function ai(){sample??=await claude.use('sample');if(!sample)log('الذكاء الاصطناعي غير متاح في هذا العرض.');return sample}
+function insertBtn(d,txt){const b=document.createElement('button');b.textContent='إدراج في الصفحة كنص';b.onclick=()=>{if(!pages.length)return;const p=pages[cur];addObj(newText(40,40,txt,12,p.w-80))};const c=document.createElement('button');c.textContent='نسخ';c.onclick=()=>navigator.clipboard?.writeText(txt);d.append(document.createElement('br'),b,c)}
+async function act(k){if(!pages.length||busy)return;const s=await ai();if(!s)return;busy=1;const d=log('جارٍ العمل…');
+ try{let r,txt=await pageText(cur);
+  if(k=='ocr'){const cv=document.querySelector('.lay').cv,bl=await new Promise(r=>cv.toBlob(r));r=await s('Transcribe all text visible in the image exactly, keep the original language and paragraphs, no commentary.',{images:[bl],cache:false,onText:t=>d.textContent=t.text})}
+  else{const P={translate:'ترجم النص التالي إلى '+$('#lg').value+' بدقة مع الحفاظ على الفقرات. أعد الترجمة فقط.',proof:'دقّق النص التالي إملائياً ونحوياً وأعد النص المصحح كاملاً ثم اذكر باختصار أهم التصحيحات.',format:'أعد تنسيق النص التالي: أصلح الأسطر المقطوعة، ووحّد الفقرات، وأضف عناوين مناسبة إن لزم، دون تغيير المعنى. أعد النص فقط.'}[k];
+   r=await s(P+'\n\n---\n'+txt.slice(0,20000),{cache:false,onText:t=>d.textContent=t.text})}
+  d.textContent=r.text;insertBtn(d,r.text)}catch(e){d.textContent=tr('تعذّر التنفيذ: ')+(e?.message||e.code)}busy=0}
+const LN={ar:'العربية',en:'English',de:'Deutsch'},NS={type:'number'},SS={type:'string'},BO={type:'boolean'},AR={type:'array',items:{type:'number'}};
+async function send(){const q=$('#qi').value.trim();if(!q||busy)return;$('#qi').value='';log(q,'u');{const qr=await quick(q);if(qr){log(qr);return}}if(!pages.length)return log('افتح ملفاً أولاً.');const s=await ai();if(!s)return;push();busy=1;const d=log('…'),r=Math.round,pn=n=>pages[(n||cur+1)-1];
+ if(/(لخّص|لخص|تلخيص|ملخص|summar|zusammenfass|عن ماذا|about what|worum)/i.test(q)){try{const whole=/(الملف|المستند|كامل|كله|document|file|dokument|datei|whole)/i.test(q);let t='';for(let k=whole?0:cur;k<(whole?Math.min(pages.length,15):cur+1);k++)t+=await pageText(k)+'\n';if(t.trim().length<20)d.textContent=T3('لا أرى نصاً في هذه الصفحة 🧐 جرّب 📝 PDF→نص أولاً.','I can\'t see any text on this page 🧐 try 📝 PDF→Text first.','Ich sehe keinen Text auf dieser Seite 🧐 versuche zuerst 📝 PDF→Text.');else{const res=await s('Summarize the following document text in '+LN[UI]+': first one line saying what it is about, then 5 short bullet points. Output only the summary.\n\n'+t.slice(0,14000),{cache:false,onText:x=>d.textContent=x.text});d.textContent=res.text;insertBtn(d,res.text)}}catch(e){d.textContent=tr('تعذّر التنفيذ: ')+(e?.message||e.code)}busy=0;return}
+ const T=(name,description,props,req,fn)=>({name,description,inputSchema:{type:'object',properties:props,required:req},execute:async i=>{try{return(await fn(i||{}))??'ok'}catch(e){return'error: '+e.message}}});
+ const tools=[
+ T('get_info','Document overview: page count, current page, per-page state',{},[],async()=>JSON.stringify({current:cur+1,pages:pages.map((p,k)=>({n:k+1,w:r(p.w),h:r(p.h),added:p.objs.length,clean:p.clean||null,rot:p.rot||0,blank:p.s<0}))})),
+ T('read_page','Read the text of a page',{page:NS},['page'],async i=>(await pageText(i.page-1)).slice(0,12000)),
+ T('list_objects','List objects added by the editor on a page (text boxes, images, covers) with 1-based ids',{page:NS},['page'],async i=>JSON.stringify(pn(i.page).objs.map((o,k)=>({id:k+1,type:o.t,x:r(o.x),y:r(o.y),w:r(o.w),h:o.h&&r(o.h),text:o.txt,size:o.sz,font:o.font,color:o.col,bold:o.b})))),
+ T('add_text','Add a text box. Coordinates in points from top-left (A4 is about 595x842)',{page:NS,text:SS,x:NS,y:NS,width:NS,size:NS,font:SS,color:SS,bold:BO},['page','text','x','y'],async i=>{const p=pn(i.page),o=newText(i.x,i.y,i.text,i.size||14,i.width||p.w-i.x-30,i.color||'#000000',i.font||'Tahoma');o.b=!!i.bold;p.objs.push(o)}),
+ T('update_object','Modify or delete (delete:true) an added object: text, size, font, color as #rrggbb, bold, position, width/height',{page:NS,id:NS,delete:BO,text:SS,x:NS,y:NS,width:NS,height:NS,size:NS,font:SS,color:SS,bold:BO},['page','id'],async i=>{const o=pn(i.page)?.objs[i.id-1];if(!o)return'no such object';if(i.delete){pn(i.page).objs.splice(i.id-1,1);return}const m={text:'txt',x:'x',y:'y',width:'w',height:'h',size:'sz',font:'font',color:'col',bold:'b'};for(const k in m)if(i[k]!==undefined)o[m[k]]=i[k]}),
+ T('add_cover','Add a filled rectangle that covers/erases an area',{page:NS,x:NS,y:NS,width:NS,height:NS,color:SS},['page','x','y','width','height'],async i=>{pn(i.page).objs.push({t:'cover',x:i.x,y:i.y,w:i.width,h:i.height,col:i.color||'#ffffff'})}),
+ T('replace_text','Replace existing text on a page (covers the old text and writes the new)',{page:NS,find:SS,replacement:SS},['page','find','replacement'],async i=>{const n=i.page-1,p=pages[n];const ob=p?.objs.find(o=>o.t=='text'&&o.txt.includes(i.find));if(ob){ob.txt=ob.txt.split(i.find).join(i.replacement);return'ok'}if(!p||p.s<0)return'not possible';await show(n);const it=p.tc.items.find(t=>t.str.includes(i.find));if(!it)return'text not found';const ns=it.str.replace(i.find,i.replacement);BULK=1;editItem(p,{...it,str:ns,width:it.width*Math.max(1,ns.length/it.str.length)},document.querySelector('.lay').cv,ns);BULK=0}),
+ T('reformat_page_text','Re-typeset ALL existing text of a page as editable text with a new font/size/color/bold (use this to change the formatting of existing text). Omit size to keep original sizes; scale multiplies them.',{page:NS,font:SS,size:NS,scale:NS,color:SS,bold:BO},['page'],async i=>{const n=i.page-1,p=pages[n];if(!p||p.s<0)return'only original PDF pages';await show(n);const cv=document.querySelector('.lay').cv,Ls=[];
+  for(const t of p.tc.items.filter(t=>t.str.trim()).sort((a,b)=>b.transform[5]-a.transform[5]||a.transform[4]-b.transform[4])){const l=Ls[Ls.length-1],e=l&&l.it[l.it.length-1];if(l&&Math.abs(l.y-t.transform[5])<2&&t.transform[4]-(e.transform[4]+e.width)<Math.hypot(t.transform[0],t.transform[1])*2.5)l.it.push(t);else Ls.push({y:t.transform[5],it:[t]})}
+  BULK=1;for(const l of Ls){const sz=Math.hypot(l.it[0].transform[0],l.it[0].transform[1]),x=Math.min(...l.it.map(t=>t.transform[4])),w=Math.max(...l.it.map(t=>t.transform[4]+t.width))-x,str=l.it.map(t=>t.str).join(' ').replace(/\s+/g,' '),o=editItem(p,{str,width:w,transform:[sz,0,0,sz,x,l.y]},cv,str);o.font=i.font||o.font;o.col=i.color||'#000000';o.b=!!i.bold;o.sz=i.size||sz*(i.scale||1);o.w=w*1.2+20}BULK=0;return Ls.length+' lines reformatted'}),
+ T('clean_pages','Clean scan background (white background, crisp text). mode: bw | soft | none. Empty pages = all pages',{pages:AR,mode:SS},['mode'],async i=>{const Lp=i.pages?.length?i.pages:pages.map((_,k)=>k+1);for(const n of Lp){const p=pages[n-1];if(!p)continue;if(p.s>=0)p.clean=i.mode=='none'?null:i.mode;else if(i.mode!='none')for(const o of p.objs)if(o.t=='img'&&o.w>=p.w*.6)await cleanImg(o,i.mode)}}),
+ T('delete_pages','Delete pages by 1-based numbers',{pages:AR},['pages'],async i=>{if(i.pages.length>=pages.length)return'cannot delete all pages';pages=pages.filter((_,k)=>!i.pages.includes(k+1));chk.clear()}),
+ T('save_file','Save/export the document: format pdf|html|txt|md|png, optional filename without extension. The user confirms the save dialog',{format:SS,filename:SS},['format'],async i=>{await saveAs(i.format,i.filename);return'save dialog shown'}),
+ T('find_text','Find text on a page; returns x,y (top-left, points), width, height of the first match',{page:NS,text:SS},['page','text'],async i=>{const p=pn(i.page);if(!p||p.s<0)return'not available';const t=(await(await srcs[p.s].doc.getPage(p.i+1)).getTextContent()).items.find(t=>t.str.toLowerCase().includes(i.text.toLowerCase()));if(!t)return'not found';const z=Math.hypot(t.transform[0],t.transform[1]);return JSON.stringify({x:r(t.transform[4]),y:r(p.h-t.transform[5]-z),width:r(t.width),height:r(z)})}),
+ T('place_signature','Place the current/last saved signature image on a page. x,y top-left in points; width in points',{page:NS,x:NS,y:NS,width:NS},['page','x','y'],async i=>{const u=curSig||SG()[0];if(!u)return'no signature saved: ask the user to add one first';const p=pn(i.page),im=await loadImg(u),w=i.width||130;p.objs.push({t:'img',x:i.x,y:i.y,w,h:w*im.height/im.width,src:u})}),
+ T('auto_place_signature','Find the signature keyword/line in the document and place the saved signature there',{},[],async()=>{await autoSign();return'done'}),
+ T('page_action','Page operations. op: rotate | blank (new blank page after the given page, 0 = first) | duplicate | move (to = new position) | goto | zoom (value 0.5-3)',{op:SS,page:NS,to:NS,value:NS},['op'],async i=>{const p=pn(i.page);switch(i.op){case'rotate':if(!p||p.s<0||p.objs.length)return'not possible';p.rot=((p.rot||0)+90)%360;break;case'blank':pages.splice(i.page||0,0,{s:-1,i:0,w:595,h:842,objs:[]});break;case'duplicate':pages.splice(i.page,0,{...p,tc:null,objs:p.objs.map(({el,...r})=>r)});break;case'move':{const[q]=pages.splice(i.page-1,1);pages.splice(i.to-1,0,q);break}case'goto':cur=Math.max(0,Math.min(pages.length-1,i.page-1));break;case'zoom':zoom=Math.max(.5,Math.min(3,i.value||1.3));break;default:return'unknown op'}})];
+ H.push({role:'user',content:'You are Pdfy (بيدي), a smart, warm and lightly witty assistant living inside a PDF editor. Be concise and practical, use at most one emoji, mirror the language of the user, confirm what you did in one short sentence, and if a request is ambiguous pick the most sensible reading and say so. Never invent features. You may use every tool freely to carry out the request (formatting, text, pages, signatures, cleaning, saving). Inspect with get_info/read_page/list_objects when needed. Reply briefly in '+LN[UI]+'. Doc has '+pages.length+' pages; open page '+(cur+1)+'. Current page text:\n'+(await pageText(cur)).slice(0,6000)+'\n\nRequest: '+q});
+ try{const res=await s([...HIST,...H],{tools:tools.slice(0,16),cache:false,onText:t=>d.textContent=t.text});d.textContent=res.text;HIST.push({role:'user',content:q},{role:'assistant',content:res.text});HIST=HIST.slice(-8);H=[];insertBtn(d,res.text)}catch(e){d.textContent=tr('تعذّر التنفيذ: ')+(e?.message||e.code)}
+ chk.clear();thumbs();await show(Math.min(cur,pages.length-1));busy=0}
+// ---- SCAN
+let SC=[],si=0,smode='crop',stream;
+const otsu=(h,n)=>{let sum=0;for(let t=0;t<256;t++)sum+=t*h[t];let sB=0,wB=0,mx=0,th=128;for(let t=0;t<256;t++){wB+=h[t];if(!wB)continue;const wF=n-wB;if(!wF)break;sB+=t*h[t];const v=wB*wF*(sB/wB-(sum-sB)/wF)**2;if(v>mx){mx=v;th=t}}return th};
+function detect(c){const w=160,h=Math.round(160*c.height/c.width),t=document.createElement('canvas');t.width=w;t.height=h;const x=t.getContext('2d');x.drawImage(c,0,0,w,h);const a=x.getImageData(0,0,w,h).data,g=[],hs=new Array(256).fill(0);for(let i=0;i<w*h;i++){const v=(a[i*4]*.299+a[i*4+1]*.587+a[i*4+2]*.114)|0;g.push(v);hs[v]++}
+ const th=otsu(hs,w*h);let n=0,A=[1e9],B=[-1e9],C=[-1e9],E=[1e9];const T=[[0,0],[0,0],[0,0],[0,0]];
+ for(let y=0;y<h;y++)for(let X=0;X<w;X++)if(g[y*w+X]>th){n++;const s=X+y,d=X-y;if(s<A[0]){A=[s];T[0]=[X,y]}if(d>B[0]){B=[d];T[1]=[X,y]}if(s>C[0]){C=[s];T[2]=[X,y]}if(d<E[0]){E=[d];T[3]=[X,y]}}
+ if(n<w*h*.12||n>w*h*.9)return[[.04,.04],[.96,.04],[.96,.96],[.04,.96]];return T.map(([X,y])=>[X/w,y/h])}
+function solve(A,B){const n=8,M=A.map((r,i)=>[...r,B[i]]);for(let i=0;i<n;i++){let p=i;for(let r=i+1;r<n;r++)if(Math.abs(M[r][i])>Math.abs(M[p][i]))p=r;[M[i],M[p]]=[M[p],M[i]];for(let r=0;r<n;r++)if(r!=i){const f=M[r][i]/M[i][i];for(let c=i;c<=n;c++)M[r][c]-=f*M[i][c]}}return M.map((r,i)=>r[n]/r[i])}
+function warp(c,q,cap){const P=q.map(([x,y])=>[x*c.width,y*c.height]),d=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);let W=Math.max(d(P[0],P[1]),d(P[3],P[2])),H=Math.max(d(P[0],P[3]),d(P[1],P[2]));const k=Math.min(1,cap/Math.max(W,H));W=Math.max(8,Math.round(W*k));H=Math.max(8,Math.round(H*k));
+ const A=[],B=[];[[0,0],[W,0],[W,H],[0,H]].forEach(([u,v],i)=>{const[X,Y]=P[i];A.push([u,v,1,0,0,0,-u*X,-v*X]);B.push(X);A.push([0,0,0,u,v,1,-u*Y,-v*Y]);B.push(Y)});const h=solve(A,B),o=document.createElement('canvas');o.width=W;o.height=H;const od=o.getContext('2d').createImageData(W,H),sw=c.width,sh=c.height,sd=c.getContext('2d').getImageData(0,0,sw,sh).data;
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){const z=h[6]*x+h[7]*y+1,X=(h[0]*x+h[1]*y+h[2])/z,Y=(h[3]*x+h[4]*y+h[5])/z,x0=Math.max(0,Math.min(sw-2,Math.floor(X))),y0=Math.max(0,Math.min(sh-2,Math.floor(Y))),fx=Math.max(0,Math.min(1,X-x0)),fy=Math.max(0,Math.min(1,Y-y0)),i=(y*W+x)*4,p=(y0*sw+x0)*4;for(let m=0;m<3;m++)od.data[i+m]=sd[p+m]*(1-fx)*(1-fy)+sd[p+4+m]*fx*(1-fy)+sd[p+sw*4+m]*(1-fx)*fy+sd[p+sw*4+4+m]*fx*fy;od.data[i+3]=255}
+ o.getContext('2d').putImageData(od,0,0);return o}
+function rotC(c,deg){const o=document.createElement('canvas'),q=deg%180;o.width=q?c.height:c.width;o.height=q?c.width:c.height;const x=o.getContext('2d');x.translate(o.width/2,o.height/2);x.rotate(deg*Math.PI/180);x.drawImage(c,-c.width/2,-c.height/2);return o}
+function magic(c,gray){const W=c.width,H=c.height,x=c.getContext('2d'),d=x.getImageData(0,0,W,H),a=d.data,B=Math.max(24,W>>5),bw=Math.ceil(W/B),bg=new Uint8Array(bw*Math.ceil(H/B)),K=i=>((i/W|0)/B|0)*bw+((i%W)/B|0);
+ for(let i=0;i<W*H;i++){const v=a[i*4]*.299+a[i*4+1]*.587+a[i*4+2]*.114,k=K(i);if(v>bg[k])bg[k]=v}
+ for(let i=0;i<W*H;i++){const f=255/Math.max(bg[K(i)],110);let r=a[i*4]*f,g=a[i*4+1]*f,b=a[i*4+2]*f;if(gray)r=g=b=.299*r+.587*g+.114*b;a[i*4]=(r-128)*1.12+128;a[i*4+1]=(g-128)*1.12+128;a[i*4+2]=(b-128)*1.12+128}x.putImageData(d,0,0)}
+function bc(c,b,ct){const x=c.getContext('2d'),d=x.getImageData(0,0,c.width,c.height),a=d.data,k=1+ct/100;for(let i=0;i<a.length;i+=4)for(let m=0;m<3;m++)a[i+m]=(a[i+m]-128)*k+128+b;x.putImageData(d,0,0)}
+function scOut(it,cap){const k=JSON.stringify([it.q,it.rot,cap]);if(it.wk!=k){let c=warp(it.o,it.q,cap);if(it.rot)c=rotC(c,it.rot);it.w=c;it.wk=k}const c=document.createElement('canvas');c.width=it.w.width;c.height=it.w.height;c.getContext('2d').drawImage(it.w,0,0);const f=it.f;if(f=='bw'||f=='soft')clean(c,f);else if(f=='magic')magic(c);else if(f=='gray')magic(c,1);if(it.b||it.c)bc(c,it.b,it.c);return c}
+function addScan(src){const k=Math.min(1,2400/Math.max(src.width,src.height)),o=document.createElement('canvas');o.width=Math.round(src.width*k);o.height=Math.round(src.height*k);o.getContext('2d').drawImage(src,0,0,o.width,o.height);SC.push({o,q:detect(o),f:'magic',rot:0,b:0,c:0});si=SC.length-1;smode='crop';scDraw()}
+function scOpen(){$('#sc').classList.add('on');scDraw()}function scClose(){camOff();$('#sc').classList.remove('on')}
+async function scCam(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920}},audio:false});$('#cvid').srcObject=stream;$('#cd').showModal()}catch(e){toast('الكاميرا غير متاحة، اختر صورة');$('#sfc').click()}}
+function scSnap(){const v=$('#cvid');if(!v.videoWidth)return;const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);addScan(c)}
+function camOff(){stream?.getTracks().forEach(t=>t.stop());stream=null;if($('#cd').open)$('#cd').close()}
+['sfl','sfc'].forEach(id=>$('#'+id).onchange=async e=>{for(const f of e.target.files){try{addScan(await createImageBitmap(f,{imageOrientation:'from-image'}))}catch(x){toast(tr('تعذّر التنفيذ: ')+x.message)}}e.target.value=''});
+function scDraw(){const it=SC[si],th=$('#sth'),cv=$('#scv'),x=cv.getContext('2d');th.innerHTML='';SC.forEach((t,n)=>{const d=document.createElement('div'),c=document.createElement('canvas');c.width=70;c.height=Math.round(70*t.o.height/t.o.width);c.getContext('2d').drawImage(t.o,0,0,c.width,c.height);d.append(c,n+1);if(n==si)d.className='on';d.onclick=()=>{si=n;smode='view';scDraw()};th.append(d)});
+ $('#sem').style.display=it?'none':'block';cv.style.display=it?'':'none';if(!it)return;$('#sfi').value=it.f;$('#sbr').value=it.b;$('#sct').value=it.c;
+ if(smode=='crop'){const k=Math.min(1,1000/Math.max(it.o.width,it.o.height));cv.width=Math.round(it.o.width*k);cv.height=Math.round(it.o.height*k);x.drawImage(it.o,0,0,cv.width,cv.height);const P=it.q.map(([a,b])=>[a*cv.width,b*cv.height]);x.fillStyle='rgba(0,0,0,.45)';x.beginPath();x.rect(0,0,cv.width,cv.height);x.moveTo(...P[0]);[...P].slice(1).reverse().forEach(p=>x.lineTo(...p));x.closePath();x.fill('evenodd');x.strokeStyle='#4dabf7';x.lineWidth=3;x.beginPath();P.forEach((p,i)=>i?x.lineTo(...p):x.moveTo(...p));x.closePath();x.stroke();P.forEach(p=>{x.fillStyle='#fff';x.beginPath();x.arc(p[0],p[1],Math.max(12,cv.width/50),0,7);x.fill();x.stroke()})}
+ else{const c=scOut(it,1100);cv.width=c.width;cv.height=c.height;x.drawImage(c,0,0)}}
+$('#scv').onpointerdown=e=>{const it=SC[si];if(smode!='crop'||!it)return;const cv=e.target,r=cv.getBoundingClientRect();let bi=-1,bd=70;it.q.forEach((p,i)=>{const d=Math.hypot((p[0]*r.width+r.left)-e.clientX,(p[1]*r.height+r.top)-e.clientY);if(d<bd){bd=d;bi=i}});if(bi<0)return;cv.setPointerCapture(e.pointerId);cv.onpointermove=m=>{it.q[bi]=[Math.max(0,Math.min(1,(m.clientX-r.left)/r.width)),Math.max(0,Math.min(1,(m.clientY-r.top)/r.height))];scDraw()};cv.onpointerup=()=>{cv.onpointermove=null}};
+const scMode=()=>{smode=smode=='crop'?'view':'crop';scDraw()},scAuto=()=>{if(SC[si]){SC[si].q=detect(SC[si].o);smode='crop';scDraw()}};
+function scF(v,all){if(!SC.length)return;(all?SC:[SC[si]]).forEach(i=>i.f=v);smode='view';scDraw()}
+function scBC(){const it=SC[si];if(!it)return;it.b=+$('#sbr').value;it.c=+$('#sct').value;smode='view';cancelAnimationFrame(scBC.r);scBC.r=requestAnimationFrame(scDraw)}
+const scRot=()=>{if(SC[si]){SC[si].rot=(SC[si].rot+90)%360;smode='view';scDraw()}},scDup=()=>{if(SC[si]){SC.splice(si+1,0,{...SC[si],q:SC[si].q.map(p=>[...p]),wk:null});si++;scDraw()}},scDel=()=>{if(SC[si]){SC.splice(si,1);si=Math.max(0,Math.min(si,SC.length-1));scDraw()}},scMv=d=>{const j=si+d;if(j<0||j>=SC.length)return;[SC[si],SC[j]]=[SC[j],SC[si]];si=j;scDraw()};
+async function putFile(data,name){let dl=null;try{dl=await window.claude?.use('downloads')}catch{}if(dl){try{await dl.save({filename:name,data});return toast('تم الحفظ ✓')}catch(e){if(e?.code=='declined')return;toast(tr('تعذّر الحفظ: ')+(e?.message||e),8000)}}const a=document.createElement('a');a.href=URL.createObjectURL(data);a.download=name;document.body.append(a);a.click();a.remove()}
+function wmk(c){const t=$('#swm').value.trim();if(!t)return c;const x=c.getContext('2d');x.save();x.translate(c.width/2,c.height/2);x.rotate(-Math.PI/6);x.font='bold '+c.width/8+'px sans-serif';x.fillStyle='rgba(120,120,120,.25)';x.textAlign='center';x.textBaseline='middle';x.fillText(t,0,0);x.restore();return c}
+const jpg=c=>b64(c.toDataURL('image/jpeg',.9)),blobOf=(c,t)=>new Promise(r=>c.toBlob(r,t||'image/jpeg',.92));
+async function scOcr(all){if(!SC.length)return;const sp=await ai();if(!sp)return;$('#sot').value=tr('جارٍ العمل…');$('#so').showModal();let t='';try{for(const it of all?SC:[SC[si]]){const r=await sp('Transcribe all text of this scanned page exactly. Keep paragraphs and the original language. Output only the text.',{images:[await blobOf(scOut(it,1600))],cache:false});t+=(t?'\n\n':'')+r.text;$('#sot').value=t}}catch(e){$('#sot').value=tr('تعذّر التنفيذ: ')+(e?.message||e.code)}return t}
+async function scTr(){const sp=await ai();if(!sp)return;const w=$('#sot').value;$('#sot').value=tr('جارٍ العمل…');try{$('#sot').value=(await sp('Translate to '+$('#slg').value+'. Keep paragraphs. Output only the translation:\n'+w,{cache:false})).text}catch(e){$('#sot').value=w}}
+async function scExp(k){if(!k||!SC.length)return;const nm=($('#swm').value.trim()&&0)||'scan-'+new Date().toISOString().slice(0,10);toast('جارٍ التحضير…');await tick();
+ try{if(k=='pdf'){const A=$('#spz').value=='a4',P=[];for(const it of SC){const o=scOut(it,1800);let c=o,w=595,h=Math.round(595*o.height/o.width);if(A){h=842;c=document.createElement('canvas');c.width=1190;c.height=1684;const x=c.getContext('2d'),f=Math.min(1190/o.width,1684/o.height);x.fillStyle='#fff';x.fillRect(0,0,1190,1684);x.drawImage(o,(1190-o.width*f)/2,(1684-o.height*f)/2,o.width*f,o.height*f)}wmk(c);P.push({w,h,iw:c.width,ih:c.height,jpg:jpg(c)});await tick()}await putFile(mkPdf(P),nm+'.pdf')}
+ else if(k=='jpg')await putFile(await blobOf(wmk(scOut(SC[si],2400))),nm+'.jpg');
+ else if(k=='txt'){const t=await scOcr(1);if(t)await putFile(new Blob([t],{type:'text/plain'}),nm+'.txt')}
+ else if(k=='id'){if(SC.length<2)return toast('أضف صورتين (وجه وظهر)');const c=document.createElement('canvas');c.width=1190;c.height=1684;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,1190,1684);SC.slice(0,2).forEach((it,i)=>{const o=scOut(it,1400),f=Math.min(800/o.width,700/o.height);x.drawImage(o,(1190-o.width*f)/2,110+i*830,o.width*f,o.height*f)});await putFile(mkPdf([{w:595,h:842,iw:1190,ih:1684,jpg:jpg(wmk(c))}]),'id-'+nm+'.pdf')}
+ else if(k=='editor'){push();const n0=pages.length;for(const it of SC){const o=scOut(it,1600),w=595,h=Math.round(w*o.height/o.width);pages.push({s:-1,i:0,w,h,objs:[{t:'img',x:0,y:0,w,h,src:o.toDataURL()}]});await tick()}scClose();thumbs();show(n0)}}
+ catch(e){toast(tr('تعذّر التنفيذ: ')+(e?.message||e),8000)}}
+// ---- split / ocr / tools
+const CT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})(),crc32=u=>{let c=-1;for(let i=0;i<u.length;i++)c=CT[(c^u[i])&255]^(c>>>8);return(c^-1)>>>0};
+function zipBlob(F){const enc=new TextEncoder(),parts=[],cen=[];let off=0;const w=a=>{parts.push(a);off+=a.length},u16=n=>[n&255,n>>8&255],u32=n=>[n&255,n>>8&255,n>>16&255,n>>>24&255];
+ for(const f of F){const nm=enc.encode(f.name),c=crc32(f.data);cen.push({nm,c,len:f.data.length,off});w(new Uint8Array([0x50,0x4b,3,4,20,0,0,8,0,0,0,0,0,0,...u32(c),...u32(f.data.length),...u32(f.data.length),...u16(nm.length),0,0]));w(nm);w(f.data)}
+ const cs=off;for(const e of cen){w(new Uint8Array([0x50,0x4b,1,2,20,0,20,0,0,8,0,0,0,0,0,0,...u32(e.c),...u32(e.len),...u32(e.len),...u16(e.nm.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(e.off)]));w(e.nm)}
+ w(new Uint8Array([0x50,0x4b,5,6,0,0,0,0,...u16(F.length),...u16(F.length),...u32(off-cs),...u32(cs),0,0]));return new Blob(parts,{type:'application/zip'})}
+async function partPdf(list,hk){try{return await build(list,hk)}catch(e){if(e.message=='cancelled')throw e;FORCE=1;try{return await build(list,hk)}finally{FORCE=0}}}
+function plan(){const N=pages.length,m=document.querySelector('input[name=sm]:checked').value,Rg=[];
+ if(m=='n'){const P=Math.max(1,Math.min(N,+$('#spa').value||1)),b=Math.floor(N/P),r=N%P;let s=0;for(let i=0;i<P;i++){const c=b+(i<r?1:0);Rg.push([s,s+c-1]);s+=c}}
+ else if(m=='k'){const K=Math.max(1,+$('#spk').value||1);for(let s=0;s<N;s+=K)Rg.push([s,Math.min(N,s+K)-1])}
+ else for(const t of $('#spm').value.split(/[,،;\n]+/).map(x=>x.trim()).filter(Boolean)){const[a,b]=t.split(/[-–]/).map(Number),y=b||a;if(!(a>=1&&y>=a&&y<=N))return{err:t};Rg.push([a-1,y-1])}
+ return{Rg}}
+function spOpen(){if(!pages.length)return toast('افتح ملفاً أولاً.');$('#spn').textContent=pages.length;spUp();$('#sp').showModal()}
+function spUp(){const{Rg,err}=plan();$('#spl').textContent=err?tr('نطاق غير صحيح')+': '+err:Rg.map((r,i)=>(i+1)+') '+(r[0]+1)+'–'+(r[1]+1)+'  ('+(r[1]-r[0]+1)+')').join('\n');$('#spl').style.whiteSpace='pre'}
+async function spGo(){const{Rg,err}=plan();if(err||!Rg.length)return toast('نطاق غير صحيح');CANCEL=0;const files=[],st=$('#sps'),zip=!$('#spzip').checked;
+ try{for(let i=0;i<Rg.length;i++){PG=(a,b)=>st.textContent=(i+1)+'/'+Rg.length+' · '+a+'/'+b;const[a,b]=Rg[i],bytes=await partPdf(pages.slice(a,b+1)),nm=docName+'_part'+(i+1)+'_('+(a+1)+'-'+(b+1)+').pdf';if(zip)files.push({name:nm,data:bytes});else await putFile(new Blob([bytes],{type:'application/pdf'}),nm)}
+  if(zip)await putFile(zipBlob(files),docName+'_parts.zip');st.textContent='✓'}catch(e){st.textContent=e.message=='cancelled'?tr('أُلغي الحفظ'):tr('تعذّر الحفظ: ')+e.message}}
+async function spSel(){const L=[...chk].sort((a,b)=>a-b).map(i=>pages[i]);if(!L.length)return toast('أشّر على صفحات في الشريط الجانبي أولاً.');CANCEL=0;PG=(a,b)=>$('#sps').textContent=a+'/'+b;try{await putFile(new Blob([await partPdf(L)],{type:'application/pdf'}),docName+'_extract.pdf');$('#sps').textContent='✓'}catch(e){$('#sps').textContent=e.message}}
+async function pageCanvas(p,S){const pj=p.s>=0?await srcs[p.s].doc.getPage(p.i+1):null,vp=pj?pj.getViewport({scale:S,rotation:(pj.rotate+(p.rot||0))%360}):null,W=Math.round(vp?vp.width:p.w*S),H=Math.round(vp?vp.height:p.h*S),c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);if(pj)await pj.render({canvasContext:x,viewport:vp}).promise;
+ for(const o of p.objs){if(o.t=='cover'){x.fillStyle=o.col;x.fillRect(o.x*S,o.y*S,o.w*S,o.h*S)}else{let u=o.src,h=o.h;if(o.t=='text'){if(!o.txt.trim())continue;const r=rast(o);u=r.u;h=r.h}const im=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=u});x.drawImage(im,o.x*S,o.y*S,o.w*S,h*S)}}return c}
+function ocOpen(){if(!pages.length)return toast('افتح ملفاً أولاً.');$('#oto').value=pages.length;$('#oc').showModal()}
+async function ocGo(){const sp=await ai();if(!sp)return;CANCEL=0;window.setOcrLang?.($('#ol').value);const a=Math.max(1,+$('#ofr').value||1),b=Math.min(pages.length,+$('#oto').value||pages.length),st=$('#ops');let out=a>1?$('#ot').value:'';
+ try{for(let n=a;n<=b;n++){if(CANCEL)break;st.textContent=(n-a+1)+' / '+(b-a+1);await tick();const p=pages[n-1];let t='';
+  if($('#oex').checked&&p.s>=0){try{t=(await pageText(n-1)).trim()}catch{}if(t.length<30)t=''}
+  if(!t){if(window.ocrWords){const r=await ocrWords(await blobOf(await pageCanvas(p,2)));t=r.text;WD.set(p,{list:r.words,S:2})}else{const r=await sp('Transcribe all text of this scanned page exactly, in its original language. Keep the paragraphs. Output only the text.',{images:[await blobOf(await pageCanvas(p,2))],cache:false});t=r.text}}
+  out+=(out?'\n\n':'')+'—— '+n+' ——\n'+t;$('#ot').value=out;$('#ot').scrollTop=1e9}st.textContent+=' ✓'}catch(e){st.textContent=tr('تعذّر التنفيذ: ')+(e?.message||e)}}
+function ocDoc(){const e=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;');putFile(new Blob(['<html dir="auto"><meta charset="utf-8"><body>'+$('#ot').value.split(/\n\n/).map(x=>'<p style="white-space:pre-wrap">'+e(x)+'</p>').join('')+'</body></html>'],{type:'application/msword'}),docName+'.doc')}
+function tlNum(){push();pages.forEach((p,i)=>p.objs.push({t:'text',x:p.w/2-18,y:p.h-34,w:60,txt:(i+1)+' / '+pages.length,sz:10,col:'#444444',font:'Tahoma',b:false}));show(cur);toast('تم ✓')}
+function tlRev(){push();pages.reverse();chk.clear();thumbs();show(0)}
+function tlWm(){const t=$('#twm').value.trim();if(!t)return;push();pages.forEach(p=>{const sz=Math.max(20,Math.min(90,Math.round((p.w-40)/(t.length*.6))));p.objs.push({t:'text',x:20,y:p.h/2-sz,w:p.w-40,txt:t,sz,col:'#cfcfcf',font:'Tahoma',b:true})});show(cur);toast('تم ✓')}
+async function tlCmp(){if(!pages.length)return;const[S,Q]=$('#tq').value.split('|').map(Number);CANCEL=0;PG=(a,b)=>$('#tls').textContent=a+' / '+b;try{const bl=await flatPdf(S,Q);await putFile(bl,docName+'_small.pdf');$('#tls').textContent=Math.round(bl.size/1024)+' KB ✓'}catch(e){$('#tls').textContent=e.message=='cancelled'?tr('أُلغي الحفظ'):e.message}}
+const WD=new Map(),LAT='https://cdn.jsdelivr.net/npm/@fontsource/noto-sans@5/files/noto-sans-latin-400-normal.woff',ARA='https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-arabic@5/files/noto-sans-arabic-arabic-400-normal.woff';
+const ldScript=u=>new Promise((r,j)=>{const e=document.createElement('script');e.src=u;e.onload=r;e.onerror=()=>j(Error('script load failed'));document.head.append(e)});
+function mkHook(){let F;return async(pg,p,out,H)=>{const w=WD.get(p);if(!w)return;
+ if(!F){F={};out.registerFontkit(window.fontkit);for(const[k,u]of[['lat',LAT],['ara',ARA]]){try{const r=await fetch(u);if(!r.ok)throw 0;F[k]=await out.embedFont(new Uint8Array(await r.arrayBuffer()),{subset:true})}catch(e){LOG('font '+k+' failed')}}if(!F.lat)F.lat=await out.embedFont(PDFLib.StandardFonts.Helvetica)}
+ for(const t of w.list){const f=/[\u0600-\u06FF]/.test(t.t)?F.ara:F.lat;if(!f)continue;try{const bw=(t.x1-t.x0)/w.S,bh=(t.y1-t.y0)/w.S,tw=f.widthOfTextAtSize(t.t,1);if(!tw||bw<=0)continue;pg.drawText(t.t,{x:t.x0/w.S,y:H-t.y1/w.S+bh*.15,size:Math.max(bh*.5,Math.min(bh*1.4,bw/tw)),font:f,opacity:0})}catch(e){}}}}
+async function ocPdf(){if(!window.ocrWords)return toast('يتوفر في نسخة الموقع/الويندوز فقط (يحتاج Tesseract)');const a=Math.max(1,+$('#ofr').value||1),b=Math.min(pages.length,+$('#oto').value||pages.length),st=$('#ops');
+ try{await ldScript('https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js');await ocGo();if(CANCEL)return;st.textContent='PDF…';CANCEL=0;PG=(i,n)=>st.textContent='PDF '+i+' / '+n;
+  await putFile(new Blob([await partPdf(pages.slice(a-1,b),mkHook())],{type:'application/pdf'}),docName+'_searchable.pdf');st.textContent='✓'}catch(e){st.textContent=tr('تعذّر الحفظ: ')+(e?.message||e)}}
+// ---- pen & signatures
+let curSig=null,lastInk=null;
+const SG=()=>{try{return JSON.parse(localStorage.getItem('sigs')||'[]')}catch{return[]}},loadImg=u=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=u});
+function sgSave(u){try{localStorage.setItem('sigs',JSON.stringify([u,...SG().filter(x=>x!=u)].slice(0,8)))}catch{}curSig=u}
+function sgList(){const d=$('#sgl');d.innerHTML='';SG().forEach(u=>{const i=new Image();i.src=u;i.style.cssText='height:38px;margin:3px;border:1px solid var(--bd);border-radius:6px;background:#fff;cursor:pointer';i.onclick=()=>{curSig=u;placeSig(u);$('#sd').close()};d.append(i)})}
+function trim(c){const W=c.width,d=c.getContext('2d').getImageData(0,0,W,c.height).data;let a=W,b=c.height,e=-1,f=-1;for(let y=0;y<c.height;y++)for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>20){if(x<a)a=x;if(x>e)e=x;if(y<b)b=y;if(y>f)f=y}if(e<a)return null;a=Math.max(0,a-4);b=Math.max(0,b-4);e=Math.min(W-1,e+4);f=Math.min(c.height-1,f+4);const o=document.createElement('canvas');o.width=e-a+1;o.height=f-b+1;o.getContext('2d').drawImage(c,a,b,o.width,o.height,0,0,o.width,o.height);return o}
+async function placeSig(u,x,y,w){const p=pages[cur];if(!p)return;curSig=u;const im=await loadImg(u);w=w||Math.min(150,p.w/3);const h=w*im.height/im.width;return addObj({t:'img',x:x??(p.w-w-60),y:y??(p.h-h-70),w,h,src:u})}
+async function sigFromFile(f){const im=await createImageBitmap(f,{imageOrientation:'from-image'}),k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext('2d');x.drawImage(im,0,0,c.width,c.height);
+ const W=c.width,H=c.height,d=x.getImageData(0,0,W,H),a=d.data,B=Math.max(16,W>>5),bw=Math.ceil(W/B),bg=new Uint8Array(bw*Math.ceil(H/B)),K=i=>((i/W|0)/B|0)*bw+((i%W)/B|0),g=new Float32Array(W*H),h=new Array(256).fill(0);
+ for(let i=0;i<W*H;i++){const v=a[i*4]*.299+a[i*4+1]*.587+a[i*4+2]*.114;g[i]=v;const q=K(i);if(v>bg[q])bg[q]=v}
+ for(let i=0;i<W*H;i++){const v=Math.min(255,g[i]*255/Math.max(bg[K(i)],100));g[i]=v;h[v|0]++}
+ const th=otsu(h,W*H);for(let i=0;i<W*H;i++){const v=g[i],al=v>=th?0:Math.min(255,(th-v)/th*255*1.7);a[i*4+3]=al;a[i*4]*=.6;a[i*4+1]*=.6;a[i*4+2]*=.6}
+ x.putImageData(d,0,0);const t=trim(c);if(!t)throw Error('no signature found');return t.toDataURL()}
+$('#fsg').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const u=await sigFromFile(f);sgSave(u);sgList();placeSig(u);$('#sd').close()}catch(x){toast(tr('تعذّر التنفيذ: ')+x.message)}};
+$('#asg').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{sgSave(await sigFromFile(f));log('تم استخراج التوقيع من الصورة وحُفظ في مكتبتك')}catch(x){log(tr('تعذّر التنفيذ: ')+x.message)}};
+function dragRect(r,x,y,done){const o=addObj({t:'cover',x,y,w:4,h:4,col:'#ffffff'}),mv=m=>{o.w=Math.max(4,(m.clientX-r.left)/zoom-x);o.h=Math.max(4,(m.clientY-r.top)/zoom-y);o.el.style.width=o.w*zoom+'px';o.el.style.height=o.h*zoom+'px'},up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);done(o)};addEventListener('pointermove',mv);addEventListener('pointerup',up)}
+async function autoSign(){if(!pages.length)return;if(!curSig)curSig=SG()[0];if(!curSig){toast('أضف توقيعاً أولاً (✍️ توقيع)');return sigOpen()}
+ const KW=['signature','unterschrift','signatur','sign here','unterzeichn','توقيع','التوقيع','إمضاء','امضاء','الإمضاء','الختم'],order=[cur,...pages.map((_,i)=>i).filter(i=>i!=cur).reverse()];
+ for(const n of order){const p=pages[n];if(p.s<0)continue;const tc=await(await srcs[p.s].doc.getPage(p.i+1)).getTextContent(),it=[...tc.items].reverse().find(t=>KW.some(k=>t.str.toLowerCase().includes(k)));if(!it)continue;
+  await show(n);const sz=Math.hypot(it.transform[0],it.transform[1]),top=p.h-it.transform[5]-sz,right=/[:：_]\s*$/.test(it.str.trim()),w=130,im=await loadImg(curSig),h=w*im.height/im.width,x=right?it.transform[4]+it.width+8:it.transform[4],y=right?top+sz/2-h/2:top-h-4;push();NP=1;addObj({t:'img',x:Math.max(0,x),y:Math.max(0,y),w,h,src:curSig});NP=0;return toast('وُضع التوقيع بجانب كلمة التوقيع — حرّكه إن لزم')}
+ toast('لم أجد كلمة «توقيع» في الملف. استخدم 🔁 استبدال توقيع وحدّد المكان.')}
+async function sigColor(){if(sel?.t!='img')return toast('اختر توقيعاً أولاً');push();const im=await loadImg(sel.src),c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);x.globalCompositeOperation='source-in';x.fillStyle=$('#fc').value;x.fillRect(0,0,c.width,c.height);sel.src=c.toDataURL();sel.ink=null;sel.el.querySelector('img').src=sel.src}
+function inkRender(o){const S=3,pad=8;let a=1e9,b=1e9,e=-1e9,f=-1e9;o.ink.forEach(s=>s.p.forEach(([x,y])=>{a=Math.min(a,x);b=Math.min(b,y);e=Math.max(e,x);f=Math.max(f,y)}));a-=pad;b-=pad;const c=document.createElement('canvas');c.width=Math.ceil((e-a+pad)*S);c.height=Math.ceil((f-b+pad)*S);const x=c.getContext('2d');x.lineCap=x.lineJoin='round';
+ for(const s of o.ink){const P=s.p,X=i=>(P[i][0]-a)*S,Y=i=>(P[i][1]-b)*S;x.strokeStyle=s.c;x.lineWidth=s.w*S;x.beginPath();x.moveTo(X(0),Y(0));for(let i=1;i<P.length-1;i++)x.quadraticCurveTo(X(i),Y(i),(X(i)+X(i+1))/2,(Y(i)+Y(i+1))/2);const n=P.length-1;x.lineTo(X(n)+.01,Y(n));x.stroke()}
+ o.x=a;o.y=b;o.w=c.width/S;o.h=c.height/S;o.src=c.toDataURL();o.el.querySelector('img').src=o.src;pos(o)}
+function inkAdd(st){const p=pages[cur],now=Date.now();let o=lastInk&&lastInk.pg==cur&&now-lastInk.t<2500&&p.objs.includes(lastInk.o)&&lastInk.o.ink?lastInk.o:null;
+ if(o)o.ink.push(st);else{o=addObj({t:'img',x:0,y:0,w:10,h:10,src:'',ink:[st]});pick(null)}inkRender(o);lastInk={o,pg:cur,t:now}}
+function penStart(ev,lay){const r=lay.getBoundingClientRect(),col=$('#pc').value,wd=+$('#pw').value,pts=[],cv=document.createElement('canvas');cv.width=lay.cv.width;cv.height=lay.cv.height;cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none';lay.append(cv);const x=cv.getContext('2d');x.strokeStyle=col;x.lineWidth=wd*zoom;x.lineCap=x.lineJoin='round';
+ const add=e=>{const q=[(e.clientX-r.left)/zoom,(e.clientY-r.top)/zoom],l=pts[pts.length-1];pts.push(q);x.beginPath();x.moveTo((l||q)[0]*zoom,(l||q)[1]*zoom);x.lineTo(q[0]*zoom+.01,q[1]*zoom);x.stroke()};
+ lay.setPointerCapture(ev.pointerId);add(ev);const mv=e=>(e.getCoalescedEvents?.()||[e]).forEach(add),up=()=>{lay.removeEventListener('pointermove',mv);lay.removeEventListener('pointerup',up);cv.remove();inkAdd({p:pts,c:col,w:wd})};lay.addEventListener('pointermove',mv);lay.addEventListener('pointerup',up)}
+// ---- smart assistant (rule router) / ribbon / search / errors
+const T3=(a,e,g)=>({ar:a,en:e,de:g})[UI]||a,PK=a=>a[Math.random()*a.length|0];
+const JOKES=[['لماذا ذهب ملف PDF إلى الطبيب؟ لأنه كان «مضغوطاً» جداً! 😄','Why did the PDF see a doctor? It was feeling too compressed! 😄','Warum ging das PDF zum Arzt? Es war zu komprimiert! 😄'],['الـPDF لا يتغيّر أبداً… إلا إذا جاء بيدي 😉','A PDF never changes… unless Pdfy shows up 😉','Ein PDF ändert sich nie… außer Pdfy kommt vorbei 😉']];
+const OK=()=>PK([T3('تمّ! ✨','Done! ✨','Erledigt! ✨'),T3('أمرك مُنفَّذ 👌','Consider it done 👌','Wird gemacht 👌'),T3('جاهز! 🎯','All set! 🎯','Fertig! 🎯')]);
+async function quick(q){const t=q.trim(),n=+(t.match(/\d+/)||[])[0];const has=r=>r.test(t),doc=pages.length>0,need=()=>T3('افتح ملفاً أولاً وسأساعدك فوراً 📂','Open a file first and I\'ll jump right in 📂','Öffne zuerst eine Datei, dann lege ich los 📂');
+ if(has(/^(مرحبا|مرحباً|اهلا|أهلا|هلا|السلام|hi|hello|hey|hallo|guten)/i))return T3('أهلاً بك! أنا بيدي 👋 اطلب مني تعديل الملف، الترجمة، التوقيع، التقطيع… وأنا أنفّذ.','Hi! I\'m Pdfy 👋 Ask me to edit, translate, sign, split… and I\'ll do it.','Hallo! Ich bin Pdfy 👋 Sag mir, was ich bearbeiten, übersetzen, signieren oder teilen soll.');
+ if(has(/نكتة|joke|witz/i))return PK(JOKES)[['ar','en','de'].indexOf(UI)];
+ if(has(/مساعدة|ماذا تستطيع|what can you|help|hilfe/i))return T3('أستطيع: حذف/إضافة/نقل/تدوير الصفحات، التقطيع، تنظيف الخلفية، OCR، الترجمة والتدقيق، التوقيع (حتى التلقائي)، ترقيم الصفحات، البحث والحفظ. جرّب: «احذف الصفحة 3» أو «قسّم الملف إلى 4».','I can delete/add/move/rotate pages, split, clean backgrounds, OCR, translate & proofread, sign (even automatically), number pages, search and save. Try: "delete page 3" or "split into 4".','Ich kann Seiten löschen/hinzufügen/verschieben/drehen, teilen, Hintergründe bereinigen, OCR, übersetzen, signieren, nummerieren, suchen und speichern. Probier: „Lösche Seite 3“ oder „In 4 Teile teilen“.');
+ if(!doc)return /(احذف|امسح|قسّم|قسم|دور|دوّر|نظف|نظّف|احفظ|delete|split|rotate|clean|save|lösch|teil|dreh)/i.test(t)?need():null;
+ let m;
+ if(m=t.match(/(?:احذف|امسح|delete|remove|lösche?n?)\D*(?:صفحة|page|seite)\D*(\d+)/i)){const k=+m[1];if(k<1||k>pages.length)return T3('رقم الصفحة خارج النطاق 🤔','That page number is out of range 🤔','Diese Seitenzahl gibt es nicht 🤔');if(pages.length<2)return T3('لا يمكن حذف الصفحة الوحيدة 😅','Can\'t delete the only page 😅','Die einzige Seite lässt sich nicht löschen 😅');push();pages.splice(k-1,1);chk.clear();thumbs();show(Math.min(cur,pages.length-1));return OK()+' ('+T3('حُذفت الصفحة','page deleted','Seite gelöscht')+' '+k+')'}
+ if(has(/(أضف|اضف|add|füge|neue).*(صفحة|page|seite)/i)){addPage();return OK()}
+ if(has(/دوّر|دور|لف|rotate|dreh/i)){rot();return OK()}
+ if(has(/تراجع|undo|rückgängig/i)){undo();return OK()}
+ if(has(/إعادة|اعادة|redo|wiederhol/i)){redo();return OK()}
+ if(has(/احفظ|حفظ|save|speicher/i)){saveAs('pdf');return T3('جارٍ التجهيز للحفظ 💾','Preparing your save 💾','Speichern wird vorbereitet 💾')}
+ if(has(/نظّف|نظف|clean|bereinig/i)){await cleanPages(has(/كل|all|alle/i)?1:0);return OK()}
+ if(has(/قسّم|قسم|قطّع|قطع|split|teil/i)){spOpen();if(n){document.querySelector('input[name=sm][value=n]').checked=true;$('#spa').value=n;spUp()}return T3('فتحت أداة التقطيع'+(n?` بـ ${n} أقسام`:'')+' ✂️','Opened the split tool'+(n?` with ${n} parts`:'')+' ✂️','Teilen-Werkzeug geöffnet'+(n?` mit ${n} Teilen`:'')+' ✂️')}
+ if(has(/(ocr|استخرج.*نص|حوّل.*نص|extract.*text|text.*extrah)/i)){ocOpen();return T3('جاهز لتحويل الصور إلى نص 📝','Ready to turn images into text 📝','Bereit, Bilder in Text umzuwandeln 📝')}
+ if(has(/رقّم|رقم الصفحات|number pages|nummerier/i)){tlNum();return OK()}
+ if(has(/وقّع|وقع|sign|unterschreib/i)&&!has(/استبدل|replace|ersetz/i)){await autoSign();return T3('حاولت وضع التوقيع في مكانه المناسب ✍️','Tried placing the signature where it belongs ✍️','Signatur wurde möglichst passend platziert ✍️')}
+ if(has(/اذهب|انتقل|go to|gehe/i)&&n){show(n-1);return OK()}
+ if(has(/(كبّر|كبر|zoom in|vergrößer)/i)){zm(.2);return OK()}
+ if(has(/(صغّر|صغر|zoom out|verkleiner)/i)){zm(-.2);return OK()}
+ if(has(/(ابحث|بحث|search|find|suche)/i)&&t.length>6){$('#fdq').value=t.replace(/^(ابحث عن|ابحث|بحث عن|search for|search|find|suche nach|suche)\s*/i,'');fdOpen();fdGo();return T3('هذه نتائج البحث 🔍','Here are the search results 🔍','Hier sind die Suchergebnisse 🔍')}
+ return null}
+function chips(){const L=[['لخّص الصفحة الحالية','Summarize the current page','Fasse die aktuelle Seite zusammen'],['ترجم الصفحة الحالية','Translate the current page','Übersetze die aktuelle Seite'],['وقّع تلقائياً','Sign automatically','Signiere automatisch'],['نظّف الخلفية','Clean the background','Bereinige den Hintergrund'],['قسّم الملف إلى 4 أجزاء','Split into 4 parts','In 4 Teile teilen'],['نكتة','Tell me a joke','Erzähl einen Witz']],i=['ar','en','de'].indexOf(UI);let d=$('#chips');if(!d){d=document.createElement('div');d.id='chips';d.className='chips';$('#q').before(d)}d.innerHTML='';L.forEach(l=>{const b=document.createElement('button');b.textContent=l[i];b.onclick=()=>{$('#qi').value=l[i];send()};d.append(b)})}
+function newDoc(){srcs=[];pages=[{s:-1,i:0,w:595,h:842,objs:[]}];docName='document';U=[];Rd=[];thumbs();show(0);rbTab('edit')}
+(function(){const h=document.querySelector('header'),kids=[...h.children],G=[[]];kids.forEach(k=>k.classList.contains('sep')?G.push([]):G[G.length-1].push(k));
+ const ai_=kids.find(k=>(k.getAttribute('onclick')||'').includes("#ai"));G[7]=G[7].filter(k=>k!=ai_);G[0].push(ai_);
+ const top=document.createElement('div');top.className='top';top.append(...G[0]);const tabs=document.createElement('div');tabs.className='tabs';top.append(tabs);
+ const defs={file:['ملف',[1,7]],edit:['تحرير',[2,3]],pages:['صفحات',[4,5,6]]},rbn=document.createElement('div');
+ for(const k in defs){const b=document.createElement('button');b.textContent=defs[k][0];b.dataset.t=k;b.onclick=()=>rbTab(k);tabs.append(b);const g=document.createElement('div');g.className='rg';g.dataset.t=k;defs[k][1].forEach(i=>g.append(...G[i]));rbn.append(g)}
+ h.replaceChildren(top,rbn);window.rbTab=k=>{h.querySelectorAll('.rg,.tabs button').forEach(e=>e.classList.toggle('on',e.dataset.t==k))};rbTab('file')})();
+async function fdGo(){const q=$('#fdq').value.trim().toLowerCase(),L=$('#fdl');if(!q||!pages.length)return;L.textContent='…';CANCEL=0;const out=[];
+ for(let n=0;n<pages.length&&out.length<150;n++){if(n%20==0)await tick();let t=pages[n]._t;if(t==null){try{t=pages[n]._t=await pageText(n)}catch{t=''}}const i=t.toLowerCase().indexOf(q);if(i>=0)out.push([n,t.slice(Math.max(0,i-30),i+60).replace(/\s+/g,' ')])}
+ L.innerHTML='';if(!out.length)L.textContent=tr('لا نتائج');out.forEach(([n,sn])=>{const d=document.createElement('div');d.textContent=(n+1)+' · '+sn;d.onclick=()=>{$('#fd').close();show(n)};L.append(d)})}
+function fdOpen(){if(!pages.length)return toast('افتح ملفاً أولاً.');$('#fd').showModal();$('#fdq').focus()}
+addEventListener('keydown',e=>{const typing=e.target.isContentEditable||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName);if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()=='f'&&pages.length){e.preventDefault();return fdOpen()}if(typing||e.ctrlKey||e.metaKey||!pages.length||document.querySelector('dialog[open]'))return;
+ if(e.key=='PageDown'||e.key=='ArrowRight'&&0){e.preventDefault();show(cur+1)}else if(e.key=='PageUp'){e.preventDefault();show(cur-1)}else if(e.key=='+'||e.key=='='){zm(.15)}else if(e.key=='-'){zm(-.15)}});
+addEventListener('error',e=>{LOG('ERR '+e.message+' @'+(e.lineno||''));if(!/ResizeObserver|Script error/.test(e.message||''))toast('⚠ '+tr('حدث خطأ غير متوقع')+': '+(e.message||''),6000)});
+addEventListener('unhandledrejection',e=>{LOG('REJ '+(e.reason?.message||e.reason));console.warn(e.reason)});
+// ---- i18n / save as
+const DM={};`↶ تراجع|↶ Undo|↶ Rückgängig
+↷ إعادة|↷ Redo|↷ Wiederholen
+📂 فتح PDF/صورة|📂 Open PDF/image|📂 PDF/Bild öffnen
+➕ دمج ملف|➕ Merge file|➕ Datei einfügen
+تحديد|Select|Auswählen
+✏️ تعديل نص موجود|✏️ Edit existing text|✏️ Vorhandenen Text bearbeiten
+T نص|T Text|T Text
+▭ تغطية/حذف|▭ Cover/erase|▭ Abdecken/Löschen
+🖼 صورة|🖼 Image|🖼 Bild
+✍️ توقيع|✍️ Sign|✍️ Signatur
+إزالة خلفية الصورة|Remove image background|Bildhintergrund entfernen
+🗑 حذف العنصر|🗑 Delete item|🗑 Element löschen
++ صفحة|+ Page|+ Seite
+⧉ نسخ|⧉ Duplicate|⧉ Duplizieren
+⟳ تدوير|⟳ Rotate|⟳ Drehen
+🗑 حذف الصفحة/المحدد|🗑 Delete page/selected|🗑 Seite(n) löschen
+☑ تحديد الكل|☑ Select all|☑ Alle wählen
+أبيض وأسود (نص أسود فقط)|Black & white (black text only)|Schwarzweiß (nur schwarzer Text)
+رمادي نظيف|Clean grayscale|Sauberes Grau
+إلغاء التنظيف|Undo cleaning|Bereinigung aufheben
+🧹 تنظيف الخلفية|🧹 Clean background|🧹 Hintergrund bereinigen
+للكل|All pages|Alle
+⇔ ملاءمة|⇔ Fit width|⇔ Breite anpassen
+💾 حفظ|💾 Save|💾 Speichern
+📑 حفظ باسم…|📑 Save as…|📑 Speichern unter…
+تصدير/تحويل…|Export/convert…|Exportieren…
+Word (يفتح في Word)|Word (opens in Word)|Word (öffnet in Word)
+نص TXT|Text TXT|Text TXT
+صورة PNG للصفحة|Page as PNG|Seite als PNG
+🤖 الذكاء الاصطناعي|🤖 AI|🤖 KI
+اسحب ملف PDF أو صورة هنا، أو اضغط «فتح».|Drop a PDF or image here, or click “Open”.|PDF oder Bild hierher ziehen oder auf „Öffnen“ klicken.
+كل المعالجة تتم في متصفحك، ولا يُرسل الملف لأي خادم (عدا طلبات الذكاء الاصطناعي).|Everything is processed locally; your file is never uploaded (except AI requests).|Alles wird lokal verarbeitet; die Datei wird nicht hochgeladen (außer KI-Anfragen).
+ترجمة|Translate|Übersetzen
+تدقيق|Proofread|Korrektur
+تنسيق|Format|Formatieren
+OCR (صورة→نص)|OCR (image→text)|OCR (Bild→Text)
+أنا مساعدك الكامل: أنفّذ أي تعديل على الملف (تنسيق، نصوص، صفحات، تنظيف، حفظ…). اطلب ما تشاء.|I'm your full assistant: I can apply any change to the file (formatting, text, pages, cleaning, saving…). Just ask.|Ich bin dein Assistent mit vollem Zugriff: Formatierung, Texte, Seiten, Bereinigung, Speichern… Frag einfach.
+إرسال|Send|Senden
+اكتب طلبك…|Type your request…|Anfrage eingeben…
+ارسم توقيعك|Draw your signature|Signatur zeichnen
+مسح|Clear|Löschen
+إضافة|Add|Hinzufügen
+إلغاء|Cancel|Abbrechen
+حفظ باسم|Save as|Speichern unter
+حفظ|Save|Speichern
+حجم الخط|Font size|Schriftgröße
+نوع التنظيف|Cleaning type|Bereinigungsart
+يطبَّق على الصفحات المؤشَّر عليها أو الحالية|Applies to ticked pages or the current one|Gilt für markierte oder aktuelle Seiten
+افتح ملفاً أولاً.|Open a file first.|Öffne zuerst eine Datei.
+لا يمكن حذف كل الصفحات.|You can't delete all pages.|Es können nicht alle Seiten gelöscht werden.
+لا يوجد شيء للتراجع عنه.|Nothing to undo.|Nichts rückgängig zu machen.
+التدوير متاح للصفحات الأصلية التي لا تحمل عناصر مضافة.|Rotation works only on original pages without added items.|Drehen geht nur bei Originalseiten ohne hinzugefügte Elemente.
+جارٍ التنظيف…|Cleaning…|Bereinige…
+تم التنظيف|Cleaned|Bereinigt
+أُلغي التنظيف|Cleaning removed|Bereinigung aufgehoben
+اختر صورة أولاً.|Select an image first.|Wähle zuerst ein Bild.
+الحفظ غير متاح في هذا العرض.|Saving isn't available in this view.|Speichern ist in dieser Ansicht nicht verfügbar.
+جارٍ العمل…|Working…|Arbeite…
+الذكاء الاصطناعي غير متاح في هذا العرض.|AI isn't available in this view.|KI ist in dieser Ansicht nicht verfügbar.
+حذف الصفحات المحددة؟|Delete the selected pages?|Ausgewählte Seiten löschen?
+تعذّر الحفظ|Save failed|Speichern fehlgeschlagen
+تعذّر التنفيذ|Action failed|Aktion fehlgeschlagen
+جارٍ التحضير…|Preparing…|Bereite vor…
+تم الحفظ ✓|Saved ✓|Gespeichert ✓
+أُلغي الحفظ|Save cancelled|Speichern abgebrochen
+إن لم يبدأ التنزيل اضغط الرابط:|If the download doesn't start, click the link:|Falls der Download nicht startet, auf den Link klicken:
+تم بناء الملف|File built|Datei erstellt
+ميزة التنزيل غير متاحة هنا|Download feature unavailable here|Download-Funktion hier nicht verfügbar
+بانتظار موافقتك على مربع الحفظ…|Waiting for you to confirm the save dialog…|Warte auf Bestätigung des Speicherdialogs…
+فتح في تبويب جديد|Open in new tab|In neuem Tab öffnen
+مشاركة|Share|Teilen
+تنزيل مباشر|Direct download|Direkter Download
+خطأ|Error|Fehler
+إغلاق|Close|Schließen
+جارٍ المعالجة|Processing|Verarbeite
+نسخ التقرير|Copy report|Bericht kopieren
+جارٍ تحليل السبب…|Analyzing the cause…|Analysiere die Ursache…
+← المحرر|← Editor|← Editor
+📷 كاميرا|📷 Camera|📷 Kamera
+🖼 من الصور|🖼 From photos|🖼 Aus Fotos
+✂️ اقتصاص|✂️ Crop|✂️ Zuschneiden
+✨ كشف الحواف|✨ Detect edges|✨ Kanten erkennen
+تحسين تلقائي|Auto enhance|Automatisch
+أصلي|Original|Original
+رمادي|Grayscale|Grau
+تطبيق على الكل|Apply to all|Auf alle anwenden
+السطوع|Brightness|Helligkeit
+التباين|Contrast|Kontrast
+📝 استخراج النص (OCR)|📝 Extract text (OCR)|📝 Text extrahieren (OCR)
+حجم الصفحة تلقائي|Auto page size|Automatische Seitengröße
+علامة مائية…|Watermark…|Wasserzeichen…
+💾 تصدير PDF|💾 Export PDF|💾 Als PDF exportieren
+خيارات أخرى…|More options…|Weitere Optionen…
+صورة JPG للصفحة|Page as JPG|Seite als JPG
+نص كل الصفحات (OCR)|Text of all pages (OCR)|Text aller Seiten (OCR)
+بطاقة هوية (وجهان في A4)|ID card (2 sides on A4)|Ausweis (2 Seiten auf A4)
+📤 إلى المحرر|📤 Send to editor|📤 Zum Editor
+التقاط|Capture|Aufnehmen
+تم|Done|Fertig
+نسخ|Copy|Kopieren
+حفظ TXT|Save TXT|TXT speichern
+ترجم النص|Translate text|Text übersetzen
+ابدأ بالتقاط صورة أو اختيار صور من الجهاز|Start by taking a photo or choosing images|Starte mit einem Foto oder wähle Bilder
+الكاميرا غير متاحة، اختر صورة|Camera unavailable, choose a photo|Kamera nicht verfügbar, Foto wählen
+أضف صورتين (وجه وظهر)|Add two images (front and back)|Zwei Bilder hinzufügen (Vorder-/Rückseite)
+✂ تقطيع PDF|✂ Split PDF|✂ PDF teilen
+📝 PDF→نص|📝 PDF→Text|📝 PDF→Text
+🧰 أدوات إضافية|🧰 More tools|🧰 Weitere Tools
+تقطيع PDF|Split PDF|PDF teilen
+عدد الصفحات الحالي:|Current page count:|Aktuelle Seitenzahl:
+عدد الأقسام|Number of parts|Anzahl der Teile
+(بالتساوي)|(equal parts)|(gleichmäßig)
+صفحات في كل قسم|Pages per part|Seiten pro Teil
+نطاقات يدوية|Manual ranges|Manuelle Bereiche
+ملفات منفصلة بدل ZIP|Separate files instead of ZIP|Einzelne Dateien statt ZIP
+✂ قطّع وحفظ|✂ Split & save|✂ Teilen & speichern
+استخراج الصفحات المؤشَّر عليها|Extract ticked pages|Markierte Seiten extrahieren
+نطاق غير صحيح|Invalid range|Ungültiger Bereich
+أشّر على صفحات في الشريط الجانبي أولاً.|Tick pages in the sidebar first.|Markiere zuerst Seiten in der Seitenleiste.
+تحويل PDF الصور إلى نص|Convert image PDF to text|Bild-PDF in Text umwandeln
+من صفحة|From page|Von Seite
+إلى|to|bis
+تلقائي (عربي/ألماني/إنجليزي)|Auto (Arabic/German/English)|Automatisch (Arabisch/Deutsch/Englisch)
+استخدم النص الموجود إن وُجد (أسرع)|Use existing text if available (faster)|Vorhandenen Text nutzen (schneller)
+▶ ابدأ|▶ Start|▶ Start
+حفظ Word|Save Word|Word speichern
+# ترقيم الصفحات|# Number pages|# Seiten nummerieren
+⇅ عكس ترتيب الصفحات|⇅ Reverse page order|⇅ Seitenreihenfolge umkehren
+نص العلامة المائية|Watermark text|Wasserzeichen-Text
+💧 علامة مائية لكل الصفحات|💧 Watermark all pages|💧 Wasserzeichen auf alle Seiten
+ضغط متوسط|Medium compression|Mittlere Komprimierung
+ضغط عالٍ (حجم أصغر)|High compression (smaller)|Starke Komprimierung (kleiner)
+ضغط خفيف|Light compression|Leichte Komprimierung
+🗜 ضغط الملف|🗜 Compress file|🗜 Datei komprimieren
+تم ✓|Done ✓|Fertig ✓
+ملف|File|Datei
+تحرير|Edit|Bearbeiten
+صفحات|Pages|Seiten
+🔍 بحث في الملف|🔍 Search in file|🔍 Im Dokument suchen
+بحث|Search|Suchen
+لا نتائج|No results|Keine Treffer
+حدث خطأ غير متوقع|Unexpected error|Unerwarteter Fehler
+مرحباً! أنا بيدي 👋|Hi! I'm Pdfy 👋|Hallo! Ich bin Pdfy 👋
+محرر PDF ذكي: عدّل، وقّع، امسح ضوئياً، ترجم، وقطّع.|A smart PDF editor: edit, sign, scan, translate and split.|Ein smarter PDF-Editor: bearbeiten, signieren, scannen, übersetzen, teilen.
+📂 افتح ملفاً|📂 Open a file|📂 Datei öffnen
+📷 امسح مستنداً|📷 Scan a document|📷 Dokument scannen
+📄 صفحة بيضاء|📄 Blank page|📄 Leere Seite
+🩺 نسخ تقرير تشخيصي|🩺 Copy diagnostic report|🩺 Diagnosebericht kopieren
+تم نسخ التقرير|Report copied|Bericht kopiert
+✒️ قلم|✒️ Pen|✒️ Stift
+لون القلم|Pen color|Stiftfarbe
+سماكة|Thickness|Stärke
+رفيع|Thin|Dünn
+متوسط|Medium|Mittel
+سميك|Thick|Dick
+🔁 استبدال توقيع|🔁 Replace signature|🔁 Signatur ersetzen
+🎯 توقيع تلقائي|🎯 Auto-place signature|🎯 Signatur automatisch setzen
+🎨 تلوين التوقيع|🎨 Recolor signature|🎨 Signatur einfärben
+📷 توقيع من صورة|📷 Signature from photo|📷 Signatur aus Foto
+حدّد بمستطيل مكان التوقيع القديم|Drag a box over the old signature|Ziehe ein Rechteck über die alte Signatur
+أضف توقيعاً أولاً (✍️ توقيع)|Add a signature first (✍️ Sign)|Füge zuerst eine Signatur hinzu (✍️ Signatur)
+اختر توقيعاً أولاً|Select a signature first|Wähle zuerst eine Signatur
+وُضع التوقيع بجانب كلمة التوقيع — حرّكه إن لزم|Signature placed next to the signature label — move it if needed|Signatur neben dem Signaturfeld platziert — bei Bedarf verschieben
+لم أجد كلمة «توقيع» في الملف. استخدم 🔁 استبدال توقيع وحدّد المكان.|No signature keyword found. Use 🔁 Replace signature and mark the spot.|Kein Signatur-Stichwort gefunden. Nutze 🔁 Signatur ersetzen und markiere die Stelle.
+تم استخراج التوقيع من الصورة وحُفظ في مكتبتك|Signature extracted from the image and saved to your library|Signatur aus dem Bild extrahiert und in deiner Bibliothek gespeichert
+أرفق صورة توقيع|Attach a signature image|Signaturbild anhängen
+📄 حفظ PDF قابل للبحث|📄 Save searchable PDF|📄 Durchsuchbares PDF speichern
+يتوفر في نسخة الموقع/الويندوز فقط (يحتاج Tesseract)|Available only in the website/Windows versions (needs Tesseract)|Nur in der Website-/Windows-Version verfügbar (benötigt Tesseract)`.split('\n').forEach(l=>{const[a,e,g]=l.split('|');DM[a]={en:e,de:g}});
+function tr(t){if(UI=='ar')return t;const m=DM[t]||DM[t.trim()];if(m)return m[UI];const k=Object.keys(DM).find(k=>/تعذّر/.test(k)&&t.startsWith(k));return k?DM[k][UI]+t.slice(k.length):t}
+function applyLang(){document.documentElement.lang=UI;document.documentElement.dir=UI=='ar'?'rtl':'ltr';$('#ui').value=UI;const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(n.parentNode.tagName=='SCRIPT')continue;if(n.__a===undefined)n.__a=n.nodeValue;const k=n.__a.trim();if(DM[k])n.nodeValue=n.__a.replace(k,UI=='ar'?k:DM[k][UI])}
+ document.querySelectorAll('[title],[placeholder]').forEach(e=>['title','placeholder'].forEach(a=>{if(e.hasAttribute(a)){e['__'+a]??=e.getAttribute(a);e.setAttribute(a,tr(e['__'+a]))}}))}
+function setUI(v){UI=LN[v]?v:'ar';try{localStorage.setItem('ui',UI)}catch{}applyLang();chips()}
+const ttl=()=>document.title=(dirty?'● ':'')+docName+' — PDF';
+function sas(){if(!pages.length)return;$('#sn').value=docName;$('#sa').showModal()}
+function sasOk(){const f=$('#sf').value,n=$('#sn').value.trim()||docName;$('#sa').close();if(f=='pdf')docName=n;saveAs(f,n)}
+try{UI=localStorage.getItem('ui')||''}catch{}if(!LN[UI]){const l=navigator.language.slice(0,2);UI=LN[l]?l:'ar'}applyLang();chips();ttl();
+setTool('select');
+</script><script>if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js')</script>
+</body></html>
